@@ -1,4 +1,9 @@
 # MLBD Project: Milestones 3 + 4
+
+## dataset
+Please download all `.csv.gz` files under `/data/raw/` before executing any file in the repository.<br>
+The files can be found here: https://drive.google.com/drive/u/2/folders/1JqRUY8_OsxbAxksN-Exsp9jkSgdQNIUZ
+
 ## Milestone 03 (not graded) - Research question selection
 **Deadline: April 4th, 23:59**
 
