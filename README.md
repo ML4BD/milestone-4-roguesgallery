@@ -2,7 +2,8 @@
 
 ## Dataset
 Please download all `.csv.gz` files under `/data/raw/` before executing any file in the repository.<br>
-The files can be found here: https://drive.google.com/drive/u/2/folders/1JqRUY8_OsxbAxksN-Exsp9jkSgdQNIUZ
+The files can be found here: https://drive.google.com/drive/u/2/folders/1JqRUY8_OsxbAxksN-Exsp9jkSgdQNIUZ <br>
+The description of the dataset can be found here: https://docs.google.com/document/d/19QDuE4fZmWkntPhYmw5P-8UlQwE_cRGE5f3vC9HQR3s/edit
 
 ## Milestone 03 (not graded) - Research question selection
 **Deadline: April 4th, 23:59**
