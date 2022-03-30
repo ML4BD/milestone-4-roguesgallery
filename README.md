@@ -1,6 +1,6 @@
 # MLBD Project: Milestones 3 + 4
 
-## dataset
+## Dataset
 Please download all `.csv.gz` files under `/data/raw/` before executing any file in the repository.<br>
 The files can be found here: https://drive.google.com/drive/u/2/folders/1JqRUY8_OsxbAxksN-Exsp9jkSgdQNIUZ
 
