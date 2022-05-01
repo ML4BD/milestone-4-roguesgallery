@@ -1,4 +1,5 @@
 # Exclude Data files
+*.pickle
 *.csv.gz
 
 # Exclude Jupyter Notebook metadata files
