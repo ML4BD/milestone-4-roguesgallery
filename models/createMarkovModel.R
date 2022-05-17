@@ -1,3 +1,5 @@
+library(dplyr)
+
 createMarkovModel <- function(data, possibleStates, order=1){
   #' Create a Markovian model of user actions on platform of a given order.
   #' 
@@ -7,21 +9,15 @@ createMarkovModel <- function(data, possibleStates, order=1){
   
   users <- unique(data$user_id)
   userMCModel <- matrix(list(), length(users), 1)
-  rownames(transition_data) <- users 
+  rownames(userMCModel) <- users 
   
   if(order > 1){
-    
-    user_sequence <- data %>% 
-      filter(user_id == users[user]) %>%
-      arrange(timestamp) %>%
-      select(action)
-    
     for(user in seq_along(users)){
       #extract chronological action sequence by user
       user_sequence <- data %>% 
         filter(user_id == users[user]) %>%
         arrange(timestamp) %>%
-        select(action)
+        dplyr::select(action)
       
       #create markov model object 
       user_sequence <- as.list(user_sequence)
@@ -36,7 +32,7 @@ createMarkovModel <- function(data, possibleStates, order=1){
     user_sequence <- data %>% 
       filter(user_id == users[user]) %>%
       arrange(timestamp) %>%
-      select(action)
+      dplyr::select(action)
     
     #create markov model object 
     user_sequence <- as.list(user_sequence)
