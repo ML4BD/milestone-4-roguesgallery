@@ -92,7 +92,7 @@
 %% the next command will enable that style.
 %%\citestyle{acmauthoryear}
 
-
+\usepackage{csquotes}
 
 %%
 %% end of the preamble, start of the body of the document source.
@@ -151,18 +151,13 @@
 %% The abstract is a short summary of the work to be presented in the
 %% article.
 \begin{abstract}
-  A clear and well-documented \LaTeX\ document is presented as an
-  article formatted for publication by ACM in a conference proceedings
-  or journal publication. Based on the ``acmart'' document class, this
-  article presents and explains many of the common variations, as well
-  as many of the formatting elements an author may use in the
-  preparation of the documentation of their work.
+Improved web technologies have made more accessible online learning format such as MOOCs and dedicated learning platforms such as Moodle. Lernnavi is one of these online education platforms, where its primary use is as an accompanying tool in secondary education. They offer Math and German lessons and exercises. Students track their progress through a mastery score updated by level checks, and proper to each topic taught. In this article, we investigate if student behavioural patterns -- extracted from data recorded on the site -- on the platform may be used to predict their level check scores using supervised learning approaches. Our results reinforce that regular and persistent usage of the platform leads to success, however we highlight some of the pitfalls of aiming to study human behaviour in this fashion. 
 \end{abstract}
 
 %%
 %% Keywords. The author(s) should pick words that accurately describe
 %% the work being presented. Separate the keywords with commas.
-\keywords{datasets, neural networks, gaze detection, text tagging}
+\keywords{datasets, regularity, decision trees, time series classification, clustering, lernnavi, moocs, education, student attainment}
 %% A "teaser" image appears between the author and affiliation
 %% information and the body of the document, and typically spans the
 %% page.
@@ -181,7 +176,16 @@
 
 \section{Introduction}
 
+
 \subsection{Research Question}
+Using the extracted data from this platform, we aim to answer the following research question:
+
+\begin{displayquote}
+\textit{Is it possible to identify one or more studying behaviors leading to a significant improvement in level check results?}
+\end{displayquote}
+
+
+
 ACM's consolidated article template, introduced in 2017, provides a
 consistent \LaTeX\ style for use across ACM publications, and
 incorporates accessibility and metadata-extraction functionality
@@ -265,13 +269,33 @@ source file:
 
 \section{The Proposed Approach}
 
-Modifying the template --- including but not limited to: adjusting
-margins, typeface sizes, line spacing, paragraph and list definitions,
-and the use of the \verb|\vspace| command to manually adjust the
-vertical spacing between elements of your work --- is not allowed.
+\subsection{A1}
 
-{\bfseries Your document will be returned to you for revision if
-  modifications are discovered.}
+\subsection{A2}
+
+\begin{table*}[!ht]
+  \caption{Time agnostic, aggregated features used in methodology A2 for a given user $i$ for all data recorded on the platform before level check $j$.}
+  \label{tab:A2features}
+  \begin{tabular}{cl}
+    \toprule
+    \textbf{Feature}&\textbf{Description}\\
+    \midrule
+    $\texttt{num\_weeks\_on}$ & number of weeks recorded having used the platform\\
+    $\texttt{num\_actions\_per\_week}$ & average number of actions with a transaction token per week\\
+    $\texttt{FDH}$ & measures the extent to which the hourly pattern of user’s activities is repeating over days \\
+    $\texttt{FWH}$ & measures if the hourly pattern of activities is repeating over weeks\\
+    $\texttt{FWD}$ & captures if the daily pattern of activities is repeating over weeks\\
+    $\texttt{eng\_score}$ & binary indicator of `high' user engagement\\
+    \bottomrule
+    \end{tabular}
+\end{table*}
+
+{\color{red}Clustering...}
+
+A decision tree classifier based on behavioural features was chosen due to the very interpretable nature of such a model. Indeed, it allows for the categorisation of students based on quantitative metrics on usage of the platform, while also ranking the importance of the behavioural features, which help us in answering our research question. 
+
+Let $N$ be the number of users and $L_i$ be the number of level checks user $i$ has completed. For every $i \in N$ and $j \in L_i$, the data fed into the decision tree classifier is a vector $x_i^j = (x_{i1}^j, x_{i2}^j, \ldots, x_{i6}^j)$ where $x_{i1}$ is a positive integer, $x_{ik}$ for $k=2,3,4$ is a positive real number and $x_{i6} \in \{0,1\}$. The features $x_{ik}$ for $k=1,\ldots, 6$ are listed in Table 
+\ref{tab:A2features}. Mention/describe: {\color{red}Regularity features...}. An `engagement score`, inspired by \cite{student_engagement}, recors whether a student demonstrated that they performed activities directly related to learning (submitting answers to questions and going to theory sections of the app) more than other students. To quantify this, if for a given user, the two aforementioned actions comprised more than $25\%$ of all actions recorded in $\texttt{num\_actions\_per\_week}$, then they were given an engagement score of $1$ and $0$ otherwise. We remark that each of these features aim to quantify some form of consistent behavioural pattern on the platform, ranging from simply being present on the platform, to using it in a repeated manner over a long period of time. 
 
 \section{Results}
 
@@ -284,6 +308,9 @@ this set of packages. Please do not substitute other typefaces. The
 as they will override the built-in typeface families.
 
 \section{Discussion}
+
+Our results demonstrate that differing patterns of student behaviours certainly influence their performance on the platform. Even as we could not identify a specific optimal behavior, both experiments clearly demonstrated its potential by giving good prediction accuracy. We believe that in future work, this platform could be used to carry out directed causal experiments where students demonstrate explicit patterns and use the technology to study what brings about student success.
+
 
 The title of your work should use capital letters appropriately -
 \url{https://capitalizemytitle.com/} has useful rules for
