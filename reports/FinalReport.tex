@@ -151,13 +151,13 @@
 %% The abstract is a short summary of the work to be presented in the
 %% article.
 \begin{abstract}
-Improved web technologies have made more accessible online learning format such as MOOCs and dedicated learning platforms such as Moodle. Lernnavi is one of these online education platforms, where its primary use is as an accompanying tool in secondary education. They offer Math and German lessons and exercises. Students track their progress through a mastery score updated by level checks, and proper to each topic taught. In this article, we investigate if student behavioural patterns -- extracted from data recorded on the site -- on the platform may be used to predict their level check scores using supervised learning approaches. Our results reinforce that regular and persistent usage of the platform leads to success, however we highlight some of the pitfalls of aiming to study human behaviour in this fashion. 
+In this report, we present the results of a learning analytics study. The data analysed are produced by chronologically recorded clickstreams of Swiss secondary school student usage of the online maths and German learning platform Lernnavi. We quantify student behavioural patterns, in particular their regularity, and use these features to predict student attainment on the platform through a supervised learning pipeline. Our results reinforce that regular and persistent usage of the platform leads to better performance, however our models also serve to highlight some of the pitfalls of aiming to study human behaviour through opaque clickstreams. 
 \end{abstract}
 
 %%
 %% Keywords. The author(s) should pick words that accurately describe
 %% the work being presented. Separate the keywords with commas.
-\keywords{datasets, regularity, decision trees, time series classification, clustering, lernnavi, moocs, education, student attainment}
+\keywords{datasets, regularity, decision trees, time series classification, prediction, clustering, lernnavi, moocs, education, student attainment}
 %% A "teaser" image appears between the author and affiliation
 %% information and the body of the document, and typically spans the
 %% page.
@@ -175,10 +175,11 @@ Improved web technologies have made more accessible online learning format such 
 \maketitle
 
 \section{Introduction}
-
+Improved digital technologies have made online learning formats such as MOOCs and dedicated learning platforms such as Moodle more accessible. Lernnavi is one of these online education platforms, whose primary use is as an accompanying teaching and learning tool in secondary education. They offer maths and German lessons and exercises. Students track their progress through a mastery score updated by so-called \textbf{level checks}, unique to each topic taught on the platform. 
 
 \subsection{Research Question}
-Using the extracted data from this platform, we aim to answer the following research question:
+
+Innately, we are all aware of the fact that self-improvement demands commitment. This notion is omnipresent in education and is a persistent device used by educators to encourage learning. Consequently, we anticipate that students who choose (or are perhaps forced) to exhibit regular, recurrent patterns of learning behaviours will experience greater learning gains in the long-run. In this project, we wish to discover if this phenomenon is present within the Lernnavi environment, while going to a step further and identify which specific behaviours \textit{may} lead to higher attainment for a given student. In light of this, we state our research question:
 
 \begin{displayquote}
 \textit{Is it possible to identify one or more studying behaviors leading to a significant improvement in level check results?}
@@ -311,7 +312,7 @@ source file:
 
 \begin{figure}
     \centering
-    \includegraphics[width=\linewidth]{reports/figures/eng_score_hist.png}
+    \includegraphics[width=\linewidth]{reports/figures/eng_score_hist.jpg}
     \caption{Caption}
     \label{fig:eng_score}
 \end{figure}
@@ -320,7 +321,7 @@ source file:
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{reports/figures/feature_corr.jpg}
-    \caption{Correlation heatmap between all the features. Note we have relabelled $\texttt{num\_actions\_per\_week}$ to #actions and $\texttt{num\_weeks\_on}$ to #weeks for display purposes.}
+    \caption{Correlation heatmap between all the features. Note we have relabelled $\texttt{num\_actions\_per\_week}$ to \#actions and $\texttt{num\_weeks\_on}$ to \#weeks for display purposes.}
     \label{fig:feature_corr}
 \end{figure}
 
@@ -767,6 +768,9 @@ dui. Etiam sagittis eleifend elementum.
 Nam interdum magna at lectus dignissim, ac dignissim lorem
 rhoncus. Maecenas eu arcu ac neque placerat aliquam. Nunc pulvinar
 massa et mattis lacinia.
+
+
+
 
 \end{document}
 \endinput
