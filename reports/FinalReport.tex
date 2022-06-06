@@ -93,7 +93,7 @@
 %%\citestyle{acmauthoryear}
 
 \usepackage{csquotes}
-
+\settopmatter{printfolios=true}
 %%
 %% end of the preamble, start of the body of the document source.
 \begin{document}
@@ -174,10 +174,10 @@ In this report, we present the results of a learning analytics study. The data a
 %% information and builds the first part of the formatted document.
 \maketitle
 
-\section{Introduction}
+\section{Introduction}\label{sec:intro}
 Improved digital technologies have made online learning formats such as MOOCs and dedicated learning platforms such as Moodle more accessible. Lernnavi is one of these online education platforms, whose primary use is as an accompanying teaching and learning tool in secondary education. They offer maths and German lessons and exercises. Students track their progress through a mastery score updated by so-called \textbf{level checks}, unique to each topic taught on the platform. 
 
-\subsection{Research Question}
+\subsection{Research Question}\label{subsec:researchQ}
 
 Innately, we are all aware of the fact that self-improvement demands commitment. This notion is omnipresent in education and is a persistent device used by educators to encourage learning. Consequently, we anticipate that students who choose (or are perhaps forced) to exhibit regular, recurrent patterns of learning behaviours will experience greater learning gains in the long-run. In this project, we wish to discover if this phenomenon is present within the Lernnavi environment, while going to a step further and identify which specific behaviours \textit{may} lead to higher attainment for a given student. In light of this, we state our research question:
 
@@ -187,7 +187,7 @@ Innately, we are all aware of the fact that self-improvement demands commitment.
 
 
 
-\section{Data Description and Exploratory Analysis}
+\section{Data Description and Exploratory Analysis}\label{sec:data}
 
 {\color{red}
 \begin{itemize}
@@ -212,20 +212,29 @@ Innately, we are all aware of the fact that self-improvement demands commitment.
 \end{figure*}
 
 
-\section{The Proposed Approach}
+\section{The Proposed Approach}\label{sec:propapp}
 
 {\color{red}
 \begin{itemize}
     \item Data cleaning approaches: what is removed and rationale; changes in shape of dataset.
 \end{itemize}
 }
-\subsection{A1}
+\subsection{A1}\label{subsec:A1}
 {\color{red}Description of methodology.}
-Clustering is performed based on a set of time agnostic features for each user. These features include: counts of each significant action (an action with a transaction token); length of time on the platform, and a set of so-called \textbf{regularity} features. The latter is a set of metrics which measure to what extent user patterns repeat of chosen time periods, for example over hours of the day, days of the week, or weeks of the month. For instance, one feature, \texttt{PDH} -- an abbreviation of \textit{peak on day hour} -- measures if a users activity is concentrated around certain times of the day, based on the entropy of the histogram of the user's daily activity. We refer the reader to \cite{quantifyreg} to find a detailed description of all of the features.
-\subsection{A2}
+Clustering is performed based on a set of time agnostic features for each user. These features include: counts of each significant action (an action with a transaction token); length of time on the platform, and a set of so-called \textbf{regularity} features. The latter is a set of metrics which measure to what extent user patterns repeat of chosen time periods, for example over hours of the day, days of the week, or weeks of the month. For instance, one feature, \texttt{PWH} -- an abbreviation of \textit{peak on day hour} -- measures if a users activity is concentrated around days of the week, based on the entropy of the histogram of the user's weekly activity. Figure \ref{fig:PWHex} illustrates the counts that the \texttt{PWH} metric is measuring. We refer the reader to \cite{quantifyreg} to find a detailed description of all of the features.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{reports/figures/PWHex.jpg}
+    \caption{Illustrative plot of daily activity for user 387650. We find that this user completes significant actions on every day of the week except for the weekend, with peaks on Tuesday and Friday.}
+    \label{fig:PWHex}
+\end{figure}
+
+
+\subsection{A2}\label{subsec:A2}
 {\color{red}Description of methodology.}     
 \begin{table*}[!ht]
-  \caption{Time agnostic, aggregated features used in methodology A2 for a given user $i$ for all data recorded on the platform before level check $j$.}
+  \caption{Time agnostic, aggregated features used in methodology A2 for a given user $i$ for all data recorded on the platform before level check $t$.}
   \label{tab:A2features}
   \begin{tabular}{cl}
     \toprule
@@ -261,12 +270,16 @@ Clustering is performed based on a set of time agnostic features for each user. 
 
 A decision tree classifier based on behavioural features was chosen due to the very interpretable nature of such a model. Indeed, it allows for the categorisation of students based on quantitative metrics on usage of the platform, while also ranking the importance of the behavioural features, which help us in answering our research question. 
 
-Let $N$ be the number of users and $L_i$ be the number of level checks user $i$ has completed. For every $i \in N$ and $j \in L_i$, the data fed into the decision tree classifier is a vector $x_i^j = (x_{i1}^j, x_{i2}^j, \ldots, x_{i6}^j)$ where $x_{i1}$ is a positive integer, $x_{ik}$ for $k=2,3,4$ is a positive real number and $x_{i6} \in \{0,1\}$. The features $x_{ik}$ for $k=1,\ldots, 6$ are listed in Table 
-\ref{tab:A2features}. Mention/describe: {\color{red}Regularity features...}. An `engagement score`, inspired by \cite{student_engagement}, recors whether a student demonstrated that they performed activities directly related to learning (submitting answers to questions and going to theory sections of the app) more than other students. To quantify this, if for a given user, the two aforementioned actions comprised more than $25\%$ of all actions recorded in $\texttt{num\_actions\_per\_week}$, then they were given an engagement score of $1$ and $0$ otherwise. We remark that each of these features aim to quantify some form of consistent behavioural pattern on the platform, ranging from simply being present on the platform, to using it in a repeated manner over a long period of time. 
+Let $N$ be the number of users and $L_i$ be the number of level checks user $i$ has completed. For every $i \in \{1,\ldots,N\}$ and $t \in {1, \ldots, L_i}$, the data fed into the decision tree classifier is a vector $x_i^t = (x_{i1}^t, x_{i2}^t, \ldots, x_{i6}^t)$ where $x_{i1}$ is a positive integer, $x_{ik}$ for $k=2,3,4$ is a positive real number and $x_{i6} \in \{0,1\}$. The features $x_{ik}$ for $k=1,\ldots, 6$ are listed in Table 
+\ref{tab:A2features}. Note the index $t$ is ordered in time. 
 
-\section{Results}
+To elaborate further, $x_{ik}$ for $k=2,3,4$ are \textbf{frequency-based} regularity features taken from \cite{quantifyreg}. In brief, these features find the spectral density of the time series generated by recording student actions, and subsequently detecting any important frequencies within the time series. This serves to identify with what frequency students repeat certain patterns of specified time periods: for the features \texttt{FDH}, \texttt{FWH} and \texttt{FWD} these are hours-across-day patterns (e.g. a user is active at 8AM every morning), hour-across-week patterns (e.g. a user is active 8AM every \textit{Monday}) and days-across-week (e.g. a user is active every \textit{Monday}) patterns respectively. Notably, the features decrease in granularity, while each capturing interesting snapshots of student behaviour. 
 
-\subsection{Experimental Evaluation}
+An `engagement score`, inspired by \cite{student_engagement}, records whether a student demonstrated that they performed activities directly related to learning (submitting answers to questions and going to theory sections of the app) more than other students. To quantify this, if for a given user, the two aforementioned actions comprised more than $25\%$ of all actions recorded in $\texttt{num\_actions\_per\_week}$, then they were given an engagement score of $1$ and $0$ otherwise. We remark that each of these features aim to quantify some form of consistent behavioural pattern on the platform, ranging from simply being present on the platform, to using it in a repeated manner over a long period of time. 
+
+\section{Results}\label{sec:results}
+
+\subsection{Experimental Evaluation}\label{subsec:eval}
 
 The ``\verb|acmart|'' document class requires the use of the
 ``Libertine'' typeface family. Your \TeX\ installation should include
@@ -274,7 +287,7 @@ this set of packages. Please do not substitute other typefaces. The
 ``\verb|lmodern|'' and ``\verb|ltimes|'' packages should not be used,
 as they will override the built-in typeface families.
 
-\section{Discussion}
+\section{Discussion}\label{sec:discussion}
 
 Our results demonstrate that differing patterns of student behaviours certainly influence their performance on the platform. Even as we could not identify a specific optimal behavior, both experiments clearly demonstrated its potential by giving good prediction accuracy. We believe that in future work, this platform could be used to carry out directed causal experiments where students demonstrate explicit patterns and use the technology to study what brings about student success.
 
@@ -292,7 +305,7 @@ command has a ``short title'' parameter:
   \title[short title]{full title}
 \end{verbatim}
 
-\section{Conclusions and Future Works}
+\section{Conclusions and Future Works}\label{sec:conclusion}
 
 Each author must be defined separately for accurate metadata
 identification.  As an exception, multiple authors may share one
