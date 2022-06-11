@@ -101,7 +101,7 @@
 %%
 %% The "title" command has an optional parameter,
 %% allowing the author to define a "short title" to be used in page headers.
-\title[Do As I Do]{Do As I Do -- more scientific follow up}
+\title[Do As I Do]{Do as I Do -- Identification of Student Behavioural Patterns to Predict Attainment on an Online Learning Platform}
 
 %%
 %% The "author" command and its associated commands are used to define
@@ -193,6 +193,9 @@ Innately, we are all aware of the fact that self-improvement demands commitment.
 \begin{itemize}
     \item Data description in its \textbf{most raw form}: what the different tables are and their contents (overview); shape of most important datasets.
     \item Exploratory analysis based on the above.
+    \item Vast majority of students on the platform belong to year groups gymnasium 1, 2 and 3 (the first group the largest)
+    \item 32\% male, 39\% female, 29\% NA, 3\% Prefer to not disclose. 
+    \item Distribution of actions, transactions etc is strongly decaying. (Fewer students do more actions).  
     \item \textbf{Note: for the above, much has already been done.} 
 \end{itemize}
 }
@@ -200,14 +203,14 @@ Innately, we are all aware of the fact that self-improvement demands commitment.
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{reports/figures/num_per_canton.jpg}
-    \caption{Caption}
+    \caption{Bar plot of the number of students per canton. Zurich and St. Gallen contain most of the users on the platform.}
     \label{fig:my_label}
 \end{figure}
 
 \begin{figure*}[!ht]
     \centering
     \includegraphics[width=\linewidth]{reports/figures/cantonal_representation.jpg}
-    \caption{Caption}
+    \caption{(Left) Number of transactions per canton. (Right) Number of transactions per canton capita.}
     \label{fig:cantonal_representation}
 \end{figure*}
 
@@ -219,9 +222,34 @@ Innately, we are all aware of the fact that self-improvement demands commitment.
     \item Data cleaning approaches: what is removed and rationale; changes in shape of dataset.
 \end{itemize}
 }
+
+Our dataset after the cleaning process consists of 790425 rows corresponding to actions of
+users on the platform. For each row, the following features will be detail:
+\begin{itemize}
+    \item \emph{`user\_id'}: identifier of the user of the educational platform.
+    \item \emph{`timestamp'}: timestamp information of when the action was performed.
+    \item \emph{`week'}: derived from the feature `timestamp', it corresponds to the week when the action was performed.
+    \item \emph{`category'}: classification of the action performed.
+    \item \emph{`action'}: type of action performed.
+    \item \emph{`start\_time'}: start time of the action.
+    \item \emph{`commit\_time'}: commit time of the action.
+    \item \emph{`num\_checks'}: total number of level checks that the user with \emph{`user\_id'} has performed.
+    \item \emph{`num\_participations'}: total number of \emph{`SUBMIT\_ANSWER'} and \emph{'`GO\_TO\_THEORY'} actions performed by an user of the educational platform.
+    \item \emph{`num\_actions\_per\_week'}: total number of significant actions performed by a particular user in a particular week. The definition of significant action can be found in the Data Processing section.
+    \item \emph{`num\_weeks\_per\_user'}: total number of significant weeks performed by a particular user. The definition of significant week can be found in the Data Processing section.
+\end{itemize}
+
+The information corresponding to the level checks performed by the users of the educational platform is located in the \emph{`learn\_sessions\_transactions'} table and can be linked to the \emph{`transactions'} table via the \emph{`transaction\_id'}.
+
+\textbf{Include plots missing.}
+
+By plotting the histograms of some of the numerical features (\emph{`num\_checks'}, \emph{`num\_participations'}, \\ \emph{`num\_actions\_per\_week'} and \emph{`num\_weeks\_per\_user'}), we can clearly see that none of them comes from a normal distribution. Indeed, they are all right skewed, which comes from the fact that only a few students are very active on the platform.
+
+We also remark that there is a geographical element to the data, and this is important because it might introduce mixed effects between the groups of students by region. Consequently we investigated to some degree the cantonal representation within the dataset and how activity on the platform varied with location. At this stage it is quite preliminary is essentially an aperçu into what additional features we may need to include in the model for more accurate results (find more details in the associated notebook).
+
 \subsection{A1}\label{subsec:A1}
 {\color{red}Description of methodology.}
-Clustering is performed based on a set of time agnostic features for each user. These features include: counts of each significant action (an action with a transaction token); length of time on the platform, and a set of so-called \textbf{regularity} features. The latter is a set of metrics which measure to what extent user patterns repeat of chosen time periods, for example over hours of the day, days of the week, or weeks of the month. For instance, one feature, \texttt{PWH} -- an abbreviation of \textit{peak on day hour} -- measures if a users activity is concentrated around days of the week, based on the entropy of the histogram of the user's weekly activity. Figure \ref{fig:PWHex} illustrates the counts that the \texttt{PWH} metric is measuring. We refer the reader to \cite{quantifyreg} to find a detailed description of all of the features.
+Clustering is performed based on a set of time agnostic features for each user. These features include: counts of each significant action (an action with a transaction token); length of time on the platform, and a set of so-called \textbf{regularity} features. The latter is a set of metrics which measure to what extent user patterns repeat of chosen time periods, for example over hours of the day, days of the week, or weeks of the month. For instance, one feature, \texttt{PWD} -- an abbreviation of \textit{peak on weekday} -- measures if a users activity is concentrated around days of the week, based on the entropy of the histogram of the user's weekly activity. Figure \ref{fig:PWHex} illustrates the counts that the \texttt{PWD} metric is measuring. We refer the reader to \cite{quantifyreg} to find a detailed description of all of the features.
 
 \begin{figure}
     \centering
@@ -289,67 +317,30 @@ as they will override the built-in typeface families.
 
 \section{Discussion}\label{sec:discussion}
 
-Our results demonstrate that differing patterns of student behaviours certainly influence their performance on the platform. Even as we could not identify a specific optimal behavior, both experiments clearly demonstrated its potential by giving good prediction accuracy. We believe that in future work, this platform could be used to carry out directed causal experiments where students demonstrate explicit patterns and use the technology to study what brings about student success.
+{\color{red}
+\begin{itemize}
+\item Justification: Choice to switch the order of clustering and classification going from A1 to A2. 
+    \item Justification: Failure of clustering
+    \item Justification: Wild variation in accuracy upon changing elements of the modelling procedure/features
+\end{itemize}
+
+}
+
+Our results demonstrate that differing patterns of student behaviours certainly influence their performance on the platform. We could not identify a specific optimal behavior, and our highest prediction accuracy confirmed the `common sense' answer to our question: the more time you spend on the platform, the better you will tend to achieve. Succinctly, consistency begets attainment. 
+
+These results, however, highlight one key difficulty with our approach. Extracting a meaningful measure of human behaviour through myriad, anonymous clickstreams is a monumental task with many concerns and limitations \cite{meaningfulmeasures}. Human behaviour is an extremely nuanced piece of our being, and the advent of Big Data gives scientists a new avenue through which to understand it. Nevertheless, more advanced techniques and methods need to be developed in order to extract precise patterns that could reasonably have a causal effect on the outcome, as this is the ultimate goal; that is, for each student to have a personalised education. 
 
 
-The title of your work should use capital letters appropriately -
-\url{https://capitalizemytitle.com/} has useful rules for
-capitalization. Use the {\verb|title|} command to define the title of
-your work. If your work has a subtitle, define it with the
-{\verb|subtitle|} command.  Do not insert line breaks in your title.
-
-If your title is lengthy, you must define a short version to be used
-in the page headers, to prevent overlapping text. The \verb|title|
-command has a ``short title'' parameter:
-\begin{verbatim}
-  \title[short title]{full title}
-\end{verbatim}
-
-\section{Conclusions and Future Works}\label{sec:conclusion}
-
-Each author must be defined separately for accurate metadata
-identification.  As an exception, multiple authors may share one
-affiliation. Authors' names should not be abbreviated; use full first
-names wherever possible. Include authors' e-mail addresses whenever
-possible.
-
-Grouping authors' names or e-mail addresses, or providing an ``e-mail
-alias,'' as shown below, is not acceptable:
-\begin{verbatim}
-  \author{Brooke Aster, David Mehldau}
-  \email{dave,judy,steve@university.edu}
-  \email{firstname.lastname@phillips.org}
-\end{verbatim}
-
-The \verb|authornote| and \verb|authornotemark| commands allow a note
-to apply to multiple authors --- for example, if the first two authors
-of an article contributed equally to the work.
-
-If your author list is lengthy, you must define a shortened version of
-the list of authors to be used in the page headers, to prevent
-overlapping text. The following command should be placed just after
-the last \verb|\author{}| definition:
-\begin{verbatim}
-  \renewcommand{\shortauthors}{McCartney, et al.}
-\end{verbatim}
-Omitting this command will force the use of a concatenated list of all
-of the authors' names, which may result in overlapping text in the
-page headers.
-
-The article template's documentation, available at
-\url{https://www.acm.org/publications/proceedings-template}, has a
-complete explanation of these commands and tips for their effective
-use.
-
-Note that authors' addresses are mandatory for journal articles.
 
 
-the margin:
-\begin{description}
-\item[\texttt{sidebar}:]  Place formatted text in the margin.
-\item[\texttt{marginfigure}:] Place a figure in the margin.
-\item[\texttt{margintable}:] Place a table in the margin.
-\end{description}
+
+\section{Conclusion and Future Works}\label{sec:conclusion}
+
+{\color{red} To conclude ... summarise work}.
+
+In future work, we suggest that the results of our work be used to inform an experiment in which the inverse approach is taken. That is, informed by data and neuroscientific and psychological literature, conduct a (conditionally) randomised experiment in which students are exposed to -- or, forced to exhibit -- a particular behaviour or structure, and appeal to the field of causal inference in order to determine any effect on attainment, by comparing and contrasting enforced behavioural patterns. For example, students might be use the platform solely as a homework device, or it might be used in conjunction with classroom learning. In this way, educators can begin to narrow the scope on what behavioural patterns lead to success, which could work in tandem with the development of machine learning models, in order to refine the patterns for which they search. 
+
+
 
 %%
 %% The acknowledgments section is defined using the "acks" environment
