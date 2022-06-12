@@ -151,7 +151,7 @@
 %% The abstract is a short summary of the work to be presented in the
 %% article.
 \begin{abstract}
-In this report, we present the results of a learning analytics study. The data analysed are produced by chronologically recorded clickstreams of Swiss secondary school student usage of the online maths and German learning platform Lernnavi. We quantify student behavioural patterns, in particular their regularity, and use these features to predict student attainment on the platform through a supervised learning pipeline. Our results reinforce that regular and persistent usage of the platform leads to better performance, however our models also serve to highlight some of the pitfalls of aiming to study human behaviour through opaque clickstreams. 
+In this report, we present the results of a learning analytics study. The analyzed data is produced by chronologically recorded clickstreams of Swiss secondary school student usage of the online maths and German learning platform Lernnavi. We quantify student behavioural patterns, in particular their regularity, and use these features to predict student attainment on the platform through a supervised learning pipeline. Our results reinforce that regular and persistent usage of the platform leads to better performance, however our models also serve to highlight some of the pitfalls of aiming to study human behaviour through opaque clickstreams. 
 \end{abstract}
 
 %%
@@ -215,40 +215,86 @@ Innately, we are all aware of the fact that self-improvement demands commitment.
 \end{figure*}
 
 
-\section{The Proposed Approach}\label{sec:propapp}
+\section{The Proposed Approaches}\label{sec:propapp}
 
 {\color{red}
 \begin{itemize}
-    \item Data cleaning approaches: what is removed and rationale; changes in shape of dataset.
+    \item (MARIA) Data cleaning approaches: what is removed and rationale; changes in shape of dataset.
 \end{itemize}
 }
 
-Our dataset after the cleaning process consists of 790425 rows corresponding to actions of
-users on the platform. For each row, the following features will be detail:
-\begin{itemize}
-    \item \emph{`user\_id'}: identifier of the user of the educational platform.
-    \item \emph{`timestamp'}: timestamp information of when the action was performed.
-    \item \emph{`week'}: derived from the feature `timestamp', it corresponds to the week when the action was performed.
-    \item \emph{`category'}: classification of the action performed.
-    \item \emph{`action'}: type of action performed.
-    \item \emph{`start\_time'}: start time of the action.
-    \item \emph{`commit\_time'}: commit time of the action.
-    \item \emph{`num\_checks'}: total number of level checks that the user with \emph{`user\_id'} has performed.
-    \item \emph{`num\_participations'}: total number of \emph{`SUBMIT\_ANSWER'} and \emph{'`GO\_TO\_THEORY'} actions performed by an user of the educational platform.
-    \item \emph{`num\_actions\_per\_week'}: total number of significant actions performed by a particular user in a particular week. The definition of significant action can be found in the Data Processing section.
-    \item \emph{`num\_weeks\_per\_user'}: total number of significant weeks performed by a particular user. The definition of significant week can be found in the Data Processing section.
-\end{itemize}
+Our dataset after the cleaning process consists of 790'425 rows corresponding to actions of
+users on the platform. For each row, the following features are listed as columns:
 
-The information corresponding to the level checks performed by the users of the educational platform is located in the \emph{`learn\_sessions\_transactions'} table and can be linked to the \emph{`transactions'} table via the \emph{`transaction\_id'}.
+\begin{table*}[!ht]
+  \caption{Time agnostic, aggregated features used in methodology A2 for a given user $i$ for all data recorded on the platform before level check $t$.}
+  \label{tab:A2features}
+  \begin{tabular}{cl}
+    \toprule
+    \textbf{Feature}&\textbf{Description}\\
+    \midrule
+    $\texttt{user\_id}$ & identifier of the user of the educational platform \\
+    $\texttt{timestamp}$ & timestamp information of when the action was performed \\
+    $\texttt{week}$ & derived from the feature $\texttt{timestamp}$, it corresponds to the week when the action was performed \\
+    $\texttt{category}$ & classification of the action performed \\
+    $\texttt{action}$ & type of action performed \\
+    $\texttt{start\_time}$ & start time of the action \\
+    $\texttt{commit\_time}$ & commit time of the action \\
+    $\texttt{num\_checks}$ & total number of level checks that the user with $\texttt{user\_id}$ has performed \\
+    $\texttt{nun\_participations}$ & total number of $\texttt{SUBMIT\_ANSWER}$ and $\texttt{GO\_TO\_THEORY}$ actions performed by an user of the platform \\
+    $\texttt{num\_actions\_per\_week}$ & total number of significant actions performed by a particular user in a particular week \\
+    $\texttt{num\_weeks\_per\_user}$ & total number of significant weeks performed by a particular user \\
+    \bottomrule
+    \end{tabular}
+\end{table*}
+
+The information corresponding to the level checks performed by the users of the educational platform is located in the \emph{`learn\_sessions\_transactions'} table and can be linked to the \emph{`transactions'} table via the \emph{`transaction\_id'}. After fetching all the level checks' dates, we create our labels to represent a measure of the learning. Indeed, we track changes in the mastery score for each level check and attribute a label of $1$ for the level checks featuring a mastery score improvement, and a label of $0$ for the ones featuring a decreasing mastery score. Then, as the chosen granularity is \textit{weekly}, we must aggregate all the level checks happening the same week for the same or different topics. To do so, we choose a simple approach by attributing to the given week the \textit{majority label} i.e. the level check week gets attributed the label of the majority of the level checks occurring during the week.
+
+Therefore, each \textbf{sample} in our classification training data is constituted of chosen \textbf{features} and a \textbf{label}. The features (varying depending on the selected approach) are information up to a specific week preceeding the level check week. The label is the result of the aggregated change in mastery score i.e. whether the student mostly improved its level check score or decreased it. \textit{Please refer to the details on each approach to illustrate the features-label in each case.}
 
 \textbf{Include plots missing.}
+
 
 By plotting the histograms of some of the numerical features (\emph{`num\_checks'}, \emph{`num\_participations'}, \\ \emph{`num\_actions\_per\_week'} and \emph{`num\_weeks\_per\_user'}), we can clearly see that none of them comes from a normal distribution. Indeed, they are all right skewed, which comes from the fact that only a few students are very active on the platform.
 
 We also remark that there is a geographical element to the data, and this is important because it might introduce mixed effects between the groups of students by region. Consequently we investigated to some degree the cantonal representation within the dataset and how activity on the platform varied with location. At this stage it is quite preliminary is essentially an aperçu into what additional features we may need to include in the model for more accurate results (find more details in the associated notebook).
 
+In the data processing phase, we first remove users with no transaction data (i.e. we keep
+users that are both in the events table and in the transactions table). To continue, inactive
+users will also be removed from our dataset since we consider that they are not using the
+platform enough to extract any valuable conclusion from them.
+
+Inactive students are students that are in one of the following situations:
+\begin{itemize}
+\item Students that have never performed a level check.
+\item Students that have not performed any $\texttt{GO\_TO\_THEORY}$ action and neither any $\texttt{SUBMIT\_ANSWER}$ action.
+\item Students that have at least two significant weeks. A significant week is defined as a
+week with at least five significant actions. Moreover, the significant actions are the
+actions in the event table that are linked through the transaction token to the
+transactions table. As a consequence, we will exclude actions like $\texttt{LOGIN}$,
+$\texttt{LOGOUT}$ or $\texttt{NAVIGATE_DASHBOARD}$ from the list of significant actions.
+\end{itemize}
+Since our goal is to predict users' success in level checks based on their regularity in time, we are not interested in users who did not perform any level check. Moreover, we will remove untrackable students: those who never did any training question or theory reading event. The justification of the cleaning decision is simply that we are not interested in users that have not performed any training or preparation for the level checks because we cannot measure their regularity (since they have not used the platform enough).
+
+Finally, we will remove users that have not been using the educational platform sufficiently during several weeks. Thus, we remove users with less than two significant weeks since we want to have data from different weeks to apply time series techniques. In addition, a significant week is defined like above since we consider that a student can reach the minimum of five significant actions per week in the platform very easily.
+
+Additionally, features that are not useful for our study have been removed. The removed features are the following: $\texttt{transaction\_id}$, $\texttt{transaction\_token}$, $\texttt{document\_id}$, $\texttt{document\_version}$, $\texttt{user\_agent}$, $\texttt{validation}$, $\texttt{solution}$, $\texttt{type}$, $\texttt{learn\_session\_id}$, $\texttt{topic\_id}$, $\texttt{is\_closed}$, $\texttt{type\_id}$, \\ $\texttt{is\_accepted}$, $\texttt{event\_id}$, $\texttt{session\_id}$, $\texttt{tracking\_data}$, \\ $\texttt{event\_type}$. Also, we are dropping the $\texttt{evaluation}$ and $\texttt{input}$ columns because we are not interested in whether a question is correct or not but in the result obtained in the whole level check.
+
+Moreover, the timestamp we get from the original raw data will be transformed to a $\texttt{datetime}$ object via the function $\texttt{to\_datetime}$ of the pandas library taking into account the fact that the timestamp given is in milliseconds to further extract the week number. We need to compute the week number to extract features such as the $\texttt{num\_actions\_per\_week}$ or $\texttt{num\_weeks\_per\_user}$ because we want to analyse the behaviour of the students over time.
+
+Time series will be used to check if regular students will perform better than those who do not have regular habits when using the platform. In other words, does regularity influence a student’s performance in the level checks done on the platform?\\
+
+We proceed onto experiments separated in 2 different approaches. Each of these approaches features a \textbf{clustering} and a \textbf{classification} part. Both techniques are applied to a different set of features to avoid data leakage through the experiment. They are chosen for the following reasons:
+
+\begin{itemize}
+    \item \textbf{Clustering} - The goal is to try to \textbf{identify and separate} according to behaviors detected in the raw data. This is a first naive approach towards grouping students with similar learning processes. Moreover, in an attempt to leverage the clustering, we also train a classifier for each clustered group. We hope to increase the classifier's accuracy by proceeding this way.
+    \item \textbf{Classification} - This technique is used to separate classes according to our created labels. Therefore, we train a group of classifiers on a class-balanced training set. The group of classifiers includes \textit{1 classifier} for the whole training data, and \textit{1 classifier per cluster}. the goal of it is to measure the predictive potential of the data regarding students' improvement. Then, if the classification technique allows it, we retrieve and analyze the classificator's coefficients to gain insights on the features important for the classification.
+\end{itemize}
+
 \subsection{A1}\label{subsec:A1}
-{\color{red}Description of methodology.}
+{\color{red} (NICO) Description of methodology.}
+
+
 Clustering is performed based on a set of time agnostic features for each user. These features include: counts of each significant action (an action with a transaction token); length of time on the platform, and a set of so-called \textbf{regularity} features. The latter is a set of metrics which measure to what extent user patterns repeat of chosen time periods, for example over hours of the day, days of the week, or weeks of the month. For instance, one feature, \texttt{PWD} -- an abbreviation of \textit{peak on weekday} -- measures if a users activity is concentrated around days of the week, based on the entropy of the histogram of the user's weekly activity. Figure \ref{fig:PWHex} illustrates the counts that the \texttt{PWD} metric is measuring. We refer the reader to \cite{quantifyreg} to find a detailed description of all of the features.
 
 \begin{figure}
@@ -260,7 +306,7 @@ Clustering is performed based on a set of time agnostic features for each user. 
 
 
 \subsection{A2}\label{subsec:A2}
-{\color{red}Description of methodology.}     
+{\color{red}(NICO + MARIA) Description of methodology.}     
 \begin{table*}[!ht]
   \caption{Time agnostic, aggregated features used in methodology A2 for a given user $i$ for all data recorded on the platform before level check $t$.}
   \label{tab:A2features}
@@ -298,30 +344,26 @@ Clustering is performed based on a set of time agnostic features for each user. 
 
 A decision tree classifier based on behavioural features was chosen due to the very interpretable nature of such a model. Indeed, it allows for the categorisation of students based on quantitative metrics on usage of the platform, while also ranking the importance of the behavioural features, which help us in answering our research question. 
 
-Let $N$ be the number of users and $L_i$ be the number of level checks user $i$ has completed. For every $i \in \{1,\ldots,N\}$ and $t \in {1, \ldots, L_i}$, the data fed into the decision tree classifier is a vector $x_i^t = (x_{i1}^t, x_{i2}^t, \ldots, x_{i6}^t)$ where $x_{i1}$ is a positive integer, $x_{ik}$ for $k=2,3,4$ is a positive real number and $x_{i6} \in \{0,1\}$. The features $x_{ik}$ for $k=1,\ldots, 6$ are listed in Table 
+Let $N$ be the number of users and $L_i$ be the number of level checks user $i$ has completed. For each $i \in \{1,\ldots,N\}$ and $t \in \{1, \ldots, L_i\}$, the data fed into the decision tree classifier is a vector $x_i^t = (x_{i1}^t, x_{i2}^t, \ldots, x_{i6}^t)$, where $x_{i1}$ is a positive integer, $x_{ik}$ for $k=2,3,4$ is a positive real number and $x_{i6} \in \{0,1\}$. The features $x_{ik}$ for $k=1,\ldots, 6$ are listed in Table 
 \ref{tab:A2features}. Note the index $t$ is ordered in time. 
 
 To elaborate further, $x_{ik}$ for $k=2,3,4$ are \textbf{frequency-based} regularity features taken from \cite{quantifyreg}. In brief, these features find the spectral density of the time series generated by recording student actions, and subsequently detecting any important frequencies within the time series. This serves to identify with what frequency students repeat certain patterns of specified time periods: for the features \texttt{FDH}, \texttt{FWH} and \texttt{FWD} these are hours-across-day patterns (e.g. a user is active at 8AM every morning), hour-across-week patterns (e.g. a user is active 8AM every \textit{Monday}) and days-across-week (e.g. a user is active every \textit{Monday}) patterns respectively. Notably, the features decrease in granularity, while each capturing interesting snapshots of student behaviour. 
 
-An `engagement score`, inspired by \cite{student_engagement}, records whether a student demonstrated that they performed activities directly related to learning (submitting answers to questions and going to theory sections of the app) more than other students. To quantify this, if for a given user, the two aforementioned actions comprised more than $25\%$ of all actions recorded in $\texttt{num\_actions\_per\_week}$, then they were given an engagement score of $1$ and $0$ otherwise. We remark that each of these features aim to quantify some form of consistent behavioural pattern on the platform, ranging from simply being present on the platform, to using it in a repeated manner over a long period of time. 
+An `engagement score', inspired by \cite{student_engagement}, records whether a student demonstrated that they performed activities directly related to learning (submitting answers to questions and going to theory sections of the app) more than other students. To quantify this, if for a given user, the two aforementioned actions comprised more than $25\%$ of all actions recorded in $\texttt{num\_actions\_per\_week}$, then they were given an engagement score of $1$ and $0$ otherwise. We remark that each of these features aim to quantify some form of consistent behavioural pattern on the platform, ranging from simply being present on the platform, to using it in a repeated manner over a long period of time. 
 
 \section{Results}\label{sec:results}
-
+{\color{red}NICO (A1), MARIA (A2)}
 \subsection{Experimental Evaluation}\label{subsec:eval}
+{\color{red}...}
 
-The ``\verb|acmart|'' document class requires the use of the
-``Libertine'' typeface family. Your \TeX\ installation should include
-this set of packages. Please do not substitute other typefaces. The
-``\verb|lmodern|'' and ``\verb|ltimes|'' packages should not be used,
-as they will override the built-in typeface families.
 
 \section{Discussion}\label{sec:discussion}
 
 {\color{red}
 \begin{itemize}
-\item Justification: Choice to switch the order of clustering and classification going from A1 to A2. 
-    \item Justification: Failure of clustering
-    \item Justification: Wild variation in accuracy upon changing elements of the modelling procedure/features
+\item Justification: (NICO) Choice to switch the order of clustering and classification going from A1 to A2. 
+    \item Justification: (NICO + MARIA) Failure of clustering
+    \item Justification: (NICO +MARIA) Wild variation in accuracy upon changing elements of the modelling procedure/features
 \end{itemize}
 
 }
