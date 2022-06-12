@@ -158,15 +158,13 @@ In this report, we present the results of a learning analytics study. The analyz
 %%
 %% Keywords. The author(s) should pick words that accurately describe
 %% the work being presented. Separate the keywords with commas.
-\keywords{datasets, regularity, decision trees, random forest classifier, time series classification, prediction, clustering, lernnavi, moocs, education, student attainment}
+\keywords{dataset, regularity, decision trees, random forest classifier, time series classification, support vector, kernel function, silhouette score, prediction, clustering, lernnavi, moocs, education, student attainment}
 %% A "teaser" image appears between the author and affiliation
 %% information and the body of the document, and typically spans the
 %% page.
 \begin{teaserfigure}
-  \includegraphics[width=\textwidth]{reports/figures/sampleteaser.pdf}
-  \caption{Seattle Mariners at Spring Training, 2010.}
-  \Description{Enjoying the baseball game from the third-base
-  seats. Ichiro Suzuki preparing to bat.}
+  \includegraphics[width=\textwidth]{reports/figures/approaches_schema.png}
+  \caption{Overview of the modelling methodology employed in this report.}
   \label{fig:teaser}
 \end{teaserfigure}
 
@@ -284,7 +282,7 @@ Our dataset after the cleaning process consists of $790,425$ rows corresponding 
 
 The information corresponding to the level checks performed by the users of the educational platform is located in the $\texttt{learn\_sessions\_transactions}$ table and can be linked to the $\texttt{transactions}$ table via the $\texttt{transaction\_id}$. After fetching all the level checks' dates, we create our labels to represent a measure of the learning. Indeed, we track changes in the mastery score for each level check and attribute a label of $1$ for the level checks featuring a mastery score improvement, and a label of $0$ for the ones featuring a decreasing mastery score. Then, as the chosen granularity is \textit{weekly}, we must aggregate all the level checks happening the same week for the same or different topics. To do so, we choose a simple approach by attributing to the given week the \textit{majority label} i.e. the level check week gets attributed the label of the majority of the level checks occurring during the week.
 
-Therefore, each \textbf{sample} in our classification training data is constituted of chosen \textbf{features} and a \textbf{label}. The features (varying depending on the selected approach) are information up to a specific week preceeding the level check week. The label is the result of the aggregated change in mastery score i.e. whether the student mostly improved its level check score or decreased it. \textit{Please refer to the details on each approach to illustrate the features-label in each case.}
+Therefore, each \textbf{sample} in our classification training data is constituted of chosen \textbf{features} and a \textbf{label}. The features (varying depending on the selected approach) are information up to a specific week preceeding the level check week. The label is the result of the aggregated change in mastery score i.e. whether the student mostly improved its level check score or decreased it. See section \ref{sec:propapp} for the details on each approach to illustrate the features-label in each case.
 
 \begin{figure}
      \centering
@@ -330,6 +328,8 @@ We proceed onto experiments separated in 2 different approaches. Each of these a
     \item \textbf{Classification} - This technique is used to separate classes according to our created labels. Therefore, we train a group of classifiers on a class-balanced training set. The group of classifiers includes 1 classifier for the whole training data, and 1 classifier per cluster. Its aim is to measure the predictive potential of the data regarding students' improvement. %Then, if the classification technique allows it, we retrieve and analyze the classifier's coefficients to gain insights on the features important for the classification.
 \end{itemize}
 
+See Figure \ref{fig:teaser} for a flowchart depiction of our methodology. 
+
 \subsection{A1}\label{subsec:A1}
 %{\color{red} (NICO) Description of methodology.}
 
@@ -337,7 +337,7 @@ The first approach features a \textit{time-agnostic} (no time dimension in the d
 
 The \textbf{clustering} is performed based on a set of time agnostic features for each user. The features are computed over the whole study period of 40 weeks. They include: \textbf{counts of each significant action} (an action with a transaction token); \textbf{length of time spent} on the platform, and a set of so-called \textbf{regularity features} \cite{quantifyreg}. The latter is a set of metrics which measure to what extent user patterns repeat of chosen time periods, for example over hours of the day, days of the week, or weeks of the month. For instance, one feature, \texttt{PWD} -- an abbreviation of \textit{peak on weekday} -- measures if a users activity is concentrated around days of the week, based on the entropy of the histogram of the user's weekly activity. Figure \ref{fig:PWHex} illustrates the counts that the \texttt{PWD} metric is measuring. We refer the reader to \cite{quantifyreg} to find a detailed description of all of the features. Moreover, we use the \textbf{K-Means clustering} technique together with the \textbf{Silhouette Score} measure in order to compute the optimal number of cluster. K-Means is selected as it is a simple and scalable algorithm which produced reasonable computation times and results.
 
-The \textbf{classification} is done over a set of time series. Contrary to the clustering phase during which each user in the training set corresponds to a sample, the classification uses time series, one for each level check. The training sample is formed by the weekly data for the student having the level check, up to the week preceding the level check. The weekly data includes the total \textit{number of actions per week}, the \textbf{time spent} on the platform during this week, \textbf{count of actions} for the selected relevant actions. Please see Figure \ref{tab:A1_feature_vectors} for a complete list of the feature aliases. Moreover, we use the \emph{tslearn} \cite{tslearn} library providing us with a collection of machine learning techniques adapted to time series. Among the proposed classicators, we select a \textbf{time series support vector} and a \textbf{time series K-NN} classification technique. Further details on their use are provided in section \ref{subsec:eval}.
+The \textbf{classification} is done over a set of time series. Contrary to the clustering phase during which each user in the training set corresponds to a sample, the classification uses time series, one for each level check. The training sample is formed by the weekly data for the student having the level check, up to the week preceding the level check. The weekly data includes the total \textit{number of actions per week}, the \textbf{time spent} on the platform during this week, \textbf{count of actions} for the selected relevant actions. Please see Figure \ref{tab:A1_feature_vectors} for a complete list of the feature aliases. Moreover, we use the \emph{tslearn} \cite{tslearn} library providing us with a collection of machine learning techniques adapted to time series. Among the proposed classicators, we select a \textbf{time series support vector} and a \textbf{time series K-NN} classification technique. Further details on their use are provided in section \ref{sec:results}.
 
 \begin{table}[h]
     \centering
@@ -453,7 +453,7 @@ An `engagement score', inspired by \cite{student_engagement}, records whether a 
 
 For each of the aforementioned approaches, we derive a series of experiments. In this section we detail the design of the experiments and then explore the results.
 %{\color{red}NICO (A1), MARIA (A2)}
-
+\subsection{Experiments}
 \subsubsection{A1}
 For the first approach, the clustering was done using the \textbf{K-Means} algorithm. For this experiment, we finetune the number of clusters \texttt{k} $\in \{2,3,\ldots, 10\}$. Then we use the \textbf{Silhouette Score} in order to see which clustering is most coherent to our data. %\textit{Let us recall that the silhouette score evaluates how well distinguishable and identified the clusters are by rating their centers’ individuality and preciseness. It ranges from $1$ (perfectly differentiable and identified clusters) to $-1$ (overlapping clusters with close centers).}
 
@@ -489,7 +489,7 @@ The silhouette scores linked to the clustering results features a clear downward
 \end{figure}
 
 Let us start by comparing the classification methods in the global (no clustering) setup. For \texttt{TimeSeriesSVC}, we can see that all scores increase significantly up to \textbf{828} samples (see figure \ref{fig:A1_classification_svc_noscluter}). For the accuracy and F1-score, we reach a maximum of \textbf{79.9\%} accuracy for 828 samples (79.6\% for 1101 samples) and \textbf{86.8\%} F1-score for 1101 samples (86.6\% for 828 samples). Finally, we see a maximum correlation of \textbf{+0.469} (Matthew’s coefficient) at 828 samples.
-For \texttt{KNeighboursTimeSeriesClassifier}, the accuracy seems to oscillate between \textbf{43\%} and \textbf{44.6\%}, and F1-score oscillates between \textbf{45.1\%} and \textbf{47.2\%} (see figure \ref{fig:A1_classification_knn_nocluster}). Both scores are below 50\% and no clear trend can be observed in any of the metrics. Finally the maximum correlation coefficient is \textbf{+0.088} which is obtained with 10 samples.
+However, using the \\ \texttt{KNeighboursTimeSeriesClassifier}, the accuracy seems to oscillate between \textbf{43\%} and \textbf{44.6\%}, and F1-score oscillates between \textbf{45.1\%} and \textbf{47.2\%} (see figure \ref{fig:A1_classification_knn_nocluster}). Both scores are below 50\% and no clear trend can be observed in any of the metrics. Finally the maximum correlation coefficient is \textbf{+0.088} which is obtained with 10 samples.
 
 Then, by looking at the clustered experiments, we can further confirm some insights.
 For \texttt{TimeSeriesSVC}, regardless of the clusters we observe that all scores increase sharply until \textbf{667} samples training-set-size (cluster 0) and \textbf{572} samples (cluster 1) (see figures \ref{fig:A1_classification_svc_cluster0} and \ref{fig:A1_classification_svc_cluster1}). Following this point, the scores seem to decrease slightly for cluster 0 and stay steady for cluster 1. This variation in cluster 0 could be interpreted as overfitting. However the highest accuracy and F1-score are confidently reached for \textbf{886} samples (accuracy: \textbf{79.9\%}; F1-score: \textbf{86.8\%}) for cluster 0 and \textbf{853} samples (accuracy: \textbf{75.6\%}; F1-score: \textbf{84.2\%}) for cluster 1. Confidence comes from the fact that cluster 0 evaluates classifiers trained up to 3’953 samples and cluster 1 up to 1’556 samples, both of which are significantly higher than the number of samples for which we observe the best scores.
@@ -555,7 +555,7 @@ Figures \ref{fig:results_rf_1} and \ref{fig:results_rf_2} plot the accuracy and 
 %\end{itemize}
 
 %}
-Let us first further elaborate on the relevance of our two approaches. Moving from A1 to A2 we switched the order of the clustering and classification steps, in which we use time series data was an attempt at verifying which type of data was best suited for each specific type of classification i.e. whether time series (resp. time agnostic) data is better leveraged in clustering or in classification. Moreover splitting the approaches in 2 steps allows us to use 2 different kinds of data in the same experiment and avoid data leakage as the features are completely different. \textit{Data leakage here refers to the data from the first step biasing the results of the second step}.
+Let us first further elaborate on the relevance of our two approaches. Moving from A1 to A2 we switched the order of the clustering and classification steps, in which our use of time series data was an attempt at verifying which type of data was best suited for each specific type of classification. Moreover splitting the approaches in 2 steps allows us to use 2 different kinds of data in the same experiment and avoid data leakage as the features are completely different.
 
 Another observation is that in both experiments, clustering did not bring much information or precision to the classification step. Indeed, even after hyperparameter fine-tuning, the time series clustering produced an intractable clustering with one cluster having 2 samples only whereas the second cluster holds all the other users. We deduce from it that distance (even with kernel transformations) is not a representative metric to interpret an optimal learning behavior. With respect to the classification results, we conclude that the separation in various dimensions is a more adapted way to catch the underlying patterns in the data.
 
