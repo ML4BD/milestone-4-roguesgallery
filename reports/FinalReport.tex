@@ -316,7 +316,7 @@ Furthermore, we decide not to disclose based on the gender on the users since th
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.75\linewidth]{reports/figures/pie_chart.png}
+    \includegraphics[width=\linewidth]{reports/figures/pie_chart.jpg}
     \caption{Pie chart of the \% of students per gender.}
     \label{fig:pie_chart}
 \end{figure}
@@ -361,28 +361,28 @@ Therefore, each \textbf{sample} in our classification training data is constitut
      \centering
      \begin{subfigure}[b]{\linewidth}
          \centering
-         \includegraphics[width=0.82\linewidth]{reports/figures/histogram_level_checks.png}
+         \includegraphics[width=0.82\linewidth]{reports/figures/histogram_level_checks.jpg}
          \caption{Histogram of the number of \emph{level checks} performed by the users of the platform.}
          \label{fig:level_cheks}
      \end{subfigure}
      \hfill
      \begin{subfigure}[b]{\linewidth}
          \centering
-         \includegraphics[width=0.82\linewidth]{reports/figures/histogram_num_participations.png}
+         \includegraphics[width=0.82\linewidth]{reports/figures/histogram_num_participations.jpg}
          \caption{Histogram of the number of \emph{participations} performed by the users of the platform.}
          \label{fig:participations}
      \end{subfigure}
      \medskip
      \begin{subfigure}[b]{\linewidth}
          \centering
-         \includegraphics[width=0.82\linewidth]{reports/figures/histogram_number_of_actions_per_week.png}
+         \includegraphics[width=0.82\linewidth]{reports/figures/histogram_number_of_actions_per_week.jpg}
          \caption{Histogram of the number of \emph{actions per week} performed by the users of the platform.}
          \label{fig:actions_per_week}
      \end{subfigure}
      \hfill
      \begin{subfigure}[b]{\linewidth}
          \centering
-         \includegraphics[width=0.82\linewidth]{reports/figures/histogram_number_of_weeks_per_user.png}
+         \includegraphics[width=0.82\linewidth]{reports/figures/histogram_number_of_weeks_per_user.jpg}
          \caption{Histogram of the number of \emph{weeks per user} in the platform.}
          \label{fig:weeks_per_user}
      \end{subfigure}
@@ -543,14 +543,47 @@ To elaborate further, $x_{ik}$ for $k=2,3,4$ are \textbf{frequency-based} regula
 An `engagement score', inspired by \cite{student_engagement}, records whether a student demonstrated that they performed activities directly related to learning (submitting answers to questions and going to theory sections of the app) more than other students. To quantify this, if for a given user, the two aforementioned actions comprised more than $25\%$ of all actions recorded in $\texttt{num\_actions\_per\_week}$, then they were given an engagement score of $1$ and $0$ otherwise. We remark that each of these features aim to quantify some form of consistent behavioural pattern on the platform, ranging from simply being present on the platform, to using it in a repeated manner over a long period of time. 
 
 \section{Results}\label{sec:results}
+
+For each one of the approaches, we derive a series of experiments. As mentioned before, the goal is to cluster the data, and train a classifier on the clustered and non-clustered data. We first detail the design of the experiments and then explore the results.
 {\color{red}NICO (A1), MARIA (A2)}
 \subsection{Experiments}\label{subsec:eval}
 
-For each one of the approaches, we derive a series of experiments. As mentionned before, the goal is to cluster the data, and train a classifier on the clustered and non-clustered data. We first detail the design of the experiments and then explore the results.
+For both approaches, we followed the same guidelines regarding clustering followed by classification. For each approach, we detail what experiments were done.\\
+
+\subsubsection{A1}
+For the first approach, the clustering was done using the \textbf{K-Means} algorithm. For this experiment, we finetune the number of cluster \texttt{k} in a range $[2, 10]$. Then we use the \textbf{Silhouette Score} in order to see which clustering is most coherent to our data. \textit{Let us recall that the silhouette score evaluates how well distinguishable and identified the clusters are by rating their centers’ individuality and preciseness. It ranges from 1 (perfectly differentiable and identified clusters) to -1 (overlapping clusters with close centers).}
+
+The classification is done using 2 different classification techniques applied to time series. Namely, we classify for the clustered and non-clustered setting using the \texttt{TimeSeriesSVC} (support-vector technique) and \\ \texttt{KNeighborsTimeSeriesClassifier} (K-NN classification technique). For the former method, we could not perform experiments by varying the \texttt{kernel} parameter as the \textit{Global Alignment Kernel} \texttt{gak} \textbf{kernel} is the only one working for the time series classification. \textit{The GAK kernel is responsible for aligning the different time series before classification}. For the latter method, we had the possibility to tune the \textbf{number of considered neighbors}. However preliminary results with the default parameter showed that the model performed significantly worse than its support-vector counterpart. Therefore, we did not perform experiments on this dimension of the model. Finally due to the significant amount of time necessary to train the classifier, we chose to perform experiments by varying the \textbf{} used for training in the range $[10, 3953]$. Let us note that the upper bound of this range is not reached for all experiments, however all experiments go up to at least $828$ samples.
+
+\subsubsection{A2}
+For the \textbf{second approach}, the clustering was done using 2 different time series clustering techniques. The techniques are \texttt{TimeSeriesKMeans} (K-NN based clustering techniques) and \texttt{KernelKMean} (variation of the former applying a kernel function before clustering). For the first technique, we vary the \textbf{number of clusters} in the integer range $[2, 6]$, the \textbf{maximum iterations} performed by the algorithm in the list $[50, 100]$, the tolerance criterion to indicate convergence in the list $[1e-5, 1e-6, 1e-7]$, the \textbf{distance metric} in the list $[\texttt{euclidean}, \texttt{dtw}]$, and whether the algorithm should use \textbf{inertia} or not.
+
+In the second part, we performed two experiments. In the first experiment, the classification step is carried out with all the behavioral features shown in Table \ref{tab:A2features}, whereas in the second experiment we left out the feature $\texttt{num\_weeks\_on}$.
+
+Both a Decision Tree Classifier and a Random Forest Classifier were trained on the whole dataset since the clustering was not relevant. Hyperparameter tunning was performed to determine the best parameters of each of the models.
+
+%% Detail the parameters tuned for each of the models
+%% Detail a little bit more how the hyperparameter tunning was done.
+
+The Figures \ref{fig:hyp_decision_1} and \ref{fig:hyp_decision_2} show accuracy results for several trainings done with different combinations of the parameters of the Decision Tree Classifier for the first and the second experiment respectively. Equivalently, the Figures \ref{fig:hyp_forest_1} and \ref{fig:hyp_forest_2} show accuracy results for several trainings done with different combinations of the parameters of the Random Forest Classifier for the first and the second experiment respectively.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{reports/figures/PWHex.jpg}
+    \caption{.}
+    \label{fig:PWHex}
+\end{figure}
 
 \subsection{Evaluation Results}\label{subsec:eval_results}
 
-For both approaches, we took the same guidelines regarding clustering followed by classification. For each approach, we detail 
+After having run the experiments, we measure the results using different metrics. These metrics depend on the clustering or classification step in the approach. For the clustering step, we use the \textbf{Silhouette Score} to measure the cluster relation to our data. For the classification step, we use 6 different metrics, namely the \textbf{accuracy} (percentage of samples correctly classified), the \textbf{balanced accuracy} (accuracy taking class balance into account), the \textbf{adjusted balanced accuracy} (balanced accuracy accounting for chance in classification), the \textbf{F1 score} (harmonic mean of the precision and recall), the \textbf{weighted F1 score} (F1 score weighted by class support) and \textbf{Matthew's coefficient} (binary classification)
+
+\subsubsection{A1}
+
+
+
+\subsubsection{A2}
+
 
 \section{Discussion}\label{sec:discussion}
 
