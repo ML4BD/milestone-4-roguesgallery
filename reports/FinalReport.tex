@@ -1,0 +1,419 @@
+%%
+%% This is file `sample-sigplan.tex',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% samples.dtx  (with options: `sigplan')
+%% 
+%% IMPORTANT NOTICE:
+%% 
+%% For the copyright see the source file.
+%% 
+%% Any modified versions of this file must be renamed
+%% with new filenames distinct from sample-sigplan.tex.
+%% 
+%% For distribution of the original source see the terms
+%% for copying and modification in the file samples.dtx.
+%% 
+%% This generated file may be distributed as long as the
+%% original source files, as listed above, are part of the
+%% same distribution. (The sources need not necessarily be
+%% in the same archive or directory.)
+%%
+%%
+%% Commands for TeXCount
+%TC:macro \cite [option:text,text]
+%TC:macro \citep [option:text,text]
+%TC:macro \citet [option:text,text]
+%TC:envir table 0 1
+%TC:envir table* 0 1
+%TC:envir tabular [ignore] word
+%TC:envir displaymath 0 word
+%TC:envir math 0 word
+%TC:envir comment 0 0
+%%
+%%
+%% The first command in your LaTeX source must be the \documentclass command.
+\documentclass[sigplan,screen]{acmart}
+
+%%
+%% \BibTeX command to typeset BibTeX logo in the docs
+\AtBeginDocument{%
+  \providecommand\BibTeX{{%
+    Bib\TeX}}}
+
+%% Rights management information.  This information is sent to you
+%% when you complete the rights form.  These commands have SAMPLE
+%% values in them; it is your responsibility as an author to replace
+%% the commands and values with those provided to you when you
+%% complete the rights form.
+\setcopyright{rightsretained}
+\copyrightyear{2022}
+%\acmYear{2018}
+%\acmDOI{XXXXXXX.XXXXXXX}
+
+%% These commands are for a PROCEEDINGS abstract or paper.
+%acmConference[Machine Learning for Behavioural Data (CS-421)]{}{12th of June,
+ % 2022}{Lausanne, CH}
+%\acmPrice{15.00}
+%\acmISBN{978-1-4503-XXXX-X/18/06}
+
+
+%%
+%% Submission ID.
+%% Use this when submitting an article to a sponsored event. You'll
+%% receive a unique submission ID from the organizers
+%% of the event, and this ID should be used as the parameter to this command.
+%%\acmSubmissionID{123-A56-BU3}
+
+%%
+%% For managing citations, it is recommended to use bibliography
+%% files in BibTeX format.
+%%
+%% You can then either use BibTeX with the ACM-Reference-Format style,
+%% or BibLaTeX with the acmnumeric or acmauthoryear sytles, that include
+%% support for advanced citation of software artefact from the
+%% biblatex-software package, also separately available on CTAN.
+%%
+%% Look at the sample-*-biblatex.tex files for templates showcasing
+%% the biblatex styles.
+%%
+
+%%
+%% The majority of ACM publications use numbered citations and
+%% references.  The command \citestyle{authoryear} switches to the
+%% "author year" style.
+%%
+%% If you are preparing content for an event
+%% sponsored by ACM SIGGRAPH, you must use the "author year" style of
+%% citations and references.
+%% Uncommenting
+%% the next command will enable that style.
+%%\citestyle{acmauthoryear}
+
+\usepackage{csquotes}
+\settopmatter{printfolios=true}
+%%
+%% end of the preamble, start of the body of the document source.
+\begin{document}
+
+%%
+%% The "title" command has an optional parameter,
+%% allowing the author to define a "short title" to be used in page headers.
+\title[Do As I Do]{Do as I Do -- Identification of Student Behavioural Patterns to Predict Attainment on an Online Learning Platform}
+
+%%
+%% The "author" command and its associated commands are used to define
+%% the authors and their affiliations.
+%% Of note is the shared affiliation of the first two authors, and the
+%% "authornote" and "authornotemark" commands
+%% used to denote shared contribution to the research.
+\author{Kai Cooper}
+\authornote{All authors contributed equally to this research.}
+\affiliation{%
+  \institution{EPFL, Mathematics (exchange from Imperial College London)}
+  \city{Lausanne}
+  \state{Vaud}
+  \country{Switzerland}
+}
+\email{kai.cooper@epfl.ch}
+
+\author{Nicolas d'Argenlieu}
+\authornotemark[1]
+\affiliation{%
+  \institution{EPFL, Data Science (Master)}
+  \city{Lausanne}
+  \state{Vaud}
+  \country{Switzerland}}
+\email{nicolas.thierrydargenlieu@epfl.ch}
+
+\author{Mar\'ia Isabel Ruiz Mart\'inez}
+\authornotemark[1]
+\affiliation{%
+  \institution{EPFL, Computer Science (exchange from Universidad de Grenada)}
+  \city{Lausanne}
+  \state{Vaud}
+  \country{Switzerland}
+}
+\email{maria.ruizmartinez@epfl.ch}
+
+
+%%
+%% By default, the full list of authors will be used in the page
+%% headers. Often, this list is too long, and will overlap
+%% other information printed in the page headers. This command allows
+%% the author to define a more concise list
+%% of authors' names for this purpose.
+\renewcommand{\shortauthors}{Cooper et al.}
+
+%%
+%% The abstract is a short summary of the work to be presented in the
+%% article.
+\begin{abstract}
+In this report, we present the results of a learning analytics study. The analyzed data is produced by chronologically recorded clickstreams of Swiss secondary school student usage of the online maths and German learning platform Lernnavi. We quantify student behavioural patterns, in particular their regularity, and use these features to predict student attainment on the platform through a supervised learning pipeline. Our results reinforce that regular and persistent usage of the platform leads to better performance, however our models also serve to highlight some of the pitfalls of aiming to study human behaviour through opaque clickstreams. 
+\end{abstract}
+
+%%
+%% Keywords. The author(s) should pick words that accurately describe
+%% the work being presented. Separate the keywords with commas.
+\keywords{datasets, regularity, decision trees, time series classification, prediction, clustering, lernnavi, moocs, education, student attainment}
+%% A "teaser" image appears between the author and affiliation
+%% information and the body of the document, and typically spans the
+%% page.
+\begin{teaserfigure}
+  \includegraphics[width=\textwidth]{reports/figures/sampleteaser.pdf}
+  \caption{Seattle Mariners at Spring Training, 2010.}
+  \Description{Enjoying the baseball game from the third-base
+  seats. Ichiro Suzuki preparing to bat.}
+  \label{fig:teaser}
+\end{teaserfigure}
+
+%%
+%% This command processes the author and affiliation and title
+%% information and builds the first part of the formatted document.
+\maketitle
+
+\section{Introduction}\label{sec:intro}
+Improved digital technologies have made online learning formats such as MOOCs and dedicated learning platforms such as Moodle more accessible. Lernnavi is one of these online education platforms, whose primary use is as an accompanying teaching and learning tool in secondary education. They offer maths and German lessons and exercises. Students track their progress through a mastery score updated by so-called \textbf{level checks}, unique to each topic taught on the platform. 
+
+\subsection{Research Question}\label{subsec:researchQ}
+
+Innately, we are all aware of the fact that self-improvement demands commitment. This notion is omnipresent in education and is a persistent device used by educators to encourage learning. Consequently, we anticipate that students who choose (or are perhaps forced) to exhibit regular, recurrent patterns of learning behaviours will experience greater learning gains in the long-run. In this project, we wish to discover if this phenomenon is present within the Lernnavi environment, while going to a step further and identify which specific behaviours \textit{may} lead to higher attainment for a given student. In light of this, we state our research question:
+
+\begin{displayquote}
+\textit{Is it possible to identify one or more studying behaviors leading to a significant improvement in level check results?}
+\end{displayquote}
+
+
+
+\section{Data Description and Exploratory Analysis}\label{sec:data}
+
+{\color{red}
+\begin{itemize}
+    \item Data description in its \textbf{most raw form}: what the different tables are and their contents (overview); shape of most important datasets.
+    \item Exploratory analysis based on the above.
+    \item Vast majority of students on the platform belong to year groups gymnasium 1, 2 and 3 (the first group the largest)
+    \item 32\% male, 39\% female, 29\% NA, 3\% Prefer to not disclose. 
+    \item Distribution of actions, transactions etc is strongly decaying. (Fewer students do more actions).  
+    \item \textbf{Note: for the above, much has already been done.} 
+\end{itemize}
+}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{reports/figures/num_per_canton.jpg}
+    \caption{Bar plot of the number of students per canton. Zurich and St. Gallen contain most of the users on the platform.}
+    \label{fig:my_label}
+\end{figure}
+
+\begin{figure*}[!ht]
+    \centering
+    \includegraphics[width=\linewidth]{reports/figures/cantonal_representation.jpg}
+    \caption{(Left) Number of transactions per canton. (Right) Number of transactions per canton capita.}
+    \label{fig:cantonal_representation}
+\end{figure*}
+
+
+\section{The Proposed Approaches}\label{sec:propapp}
+
+{\color{red}
+\begin{itemize}
+    \item (MARIA) Data cleaning approaches: what is removed and rationale; changes in shape of dataset.
+\end{itemize}
+}
+
+Our dataset after the cleaning process consists of 790'425 rows corresponding to actions of
+users on the platform. For each row, the following features are listed as columns:
+
+\begin{table*}[!ht]
+  \caption{Time agnostic, aggregated features used in methodology A2 for a given user $i$ for all data recorded on the platform before level check $t$.}
+  \label{tab:A2features}
+  \begin{tabular}{cl}
+    \toprule
+    \textbf{Feature}&\textbf{Description}\\
+    \midrule
+    $\texttt{user\_id}$ & identifier of the user of the educational platform \\
+    $\texttt{timestamp}$ & timestamp information of when the action was performed \\
+    $\texttt{week}$ & derived from the feature $\texttt{timestamp}$, it corresponds to the week when the action was performed \\
+    $\texttt{category}$ & classification of the action performed \\
+    $\texttt{action}$ & type of action performed \\
+    $\texttt{start\_time}$ & start time of the action \\
+    $\texttt{commit\_time}$ & commit time of the action \\
+    $\texttt{num\_checks}$ & total number of level checks that the user with $\texttt{user\_id}$ has performed \\
+    $\texttt{nun\_participations}$ & total number of $\texttt{SUBMIT\_ANSWER}$ and $\texttt{GO\_TO\_THEORY}$ actions performed by an user of the platform \\
+    $\texttt{num\_actions\_per\_week}$ & total number of significant actions performed by a particular user in a particular week \\
+    $\texttt{num\_weeks\_per\_user}$ & total number of significant weeks performed by a particular user \\
+    \bottomrule
+    \end{tabular}
+\end{table*}
+
+The information corresponding to the level checks performed by the users of the educational platform is located in the \emph{`learn\_sessions\_transactions'} table and can be linked to the \emph{`transactions'} table via the \emph{`transaction\_id'}. After fetching all the level checks' dates, we create our labels to represent a measure of the learning. Indeed, we track changes in the mastery score for each level check and attribute a label of $1$ for the level checks featuring a mastery score improvement, and a label of $0$ for the ones featuring a decreasing mastery score. Then, as the chosen granularity is \textit{weekly}, we must aggregate all the level checks happening the same week for the same or different topics. To do so, we choose a simple approach by attributing to the given week the \textit{majority label} i.e. the level check week gets attributed the label of the majority of the level checks occurring during the week.
+
+Therefore, each \textbf{sample} in our classification training data is constituted of chosen \textbf{features} and a \textbf{label}. The features (varying depending on the selected approach) are information up to a specific week preceeding the level check week. The label is the result of the aggregated change in mastery score i.e. whether the student mostly improved its level check score or decreased it. \textit{Please refer to the details on each approach to illustrate the features-label in each case.}
+
+\textbf{Include plots missing.}
+
+
+By plotting the histograms of some of the numerical features (\emph{`num\_checks'}, \emph{`num\_participations'}, \\ \emph{`num\_actions\_per\_week'} and \emph{`num\_weeks\_per\_user'}), we can clearly see that none of them comes from a normal distribution. Indeed, they are all right skewed, which comes from the fact that only a few students are very active on the platform.
+
+We also remark that there is a geographical element to the data, and this is important because it might introduce mixed effects between the groups of students by region. Consequently we investigated to some degree the cantonal representation within the dataset and how activity on the platform varied with location. At this stage it is quite preliminary is essentially an aperçu into what additional features we may need to include in the model for more accurate results (find more details in the associated notebook).
+
+In the data processing phase, we first remove users with no transaction data (i.e. we keep
+users that are both in the events table and in the transactions table). To continue, inactive
+users will also be removed from our dataset since we consider that they are not using the
+platform enough to extract any valuable conclusion from them.
+
+Inactive students are students that are in one of the following situations:
+\begin{itemize}
+\item Students that have never performed a level check.
+\item Students that have not performed any $\texttt{GO\_TO\_THEORY}$ action and neither any $\texttt{SUBMIT\_ANSWER}$ action.
+\item Students that have at least two significant weeks. A significant week is defined as a
+week with at least five significant actions. Moreover, the significant actions are the
+actions in the event table that are linked through the transaction token to the
+transactions table. As a consequence, we will exclude actions like $\texttt{LOGIN}$,
+$\texttt{LOGOUT}$ or $\texttt{NAVIGATE_DASHBOARD}$ from the list of significant actions.
+\end{itemize}
+Since our goal is to predict users' success in level checks based on their regularity in time, we are not interested in users who did not perform any level check. Moreover, we will remove untrackable students: those who never did any training question or theory reading event. The justification of the cleaning decision is simply that we are not interested in users that have not performed any training or preparation for the level checks because we cannot measure their regularity (since they have not used the platform enough).
+
+Finally, we will remove users that have not been using the educational platform sufficiently during several weeks. Thus, we remove users with less than two significant weeks since we want to have data from different weeks to apply time series techniques. In addition, a significant week is defined like above since we consider that a student can reach the minimum of five significant actions per week in the platform very easily.
+
+Additionally, features that are not useful for our study have been removed. The removed features are the following: $\texttt{transaction\_id}$, $\texttt{transaction\_token}$, $\texttt{document\_id}$, $\texttt{document\_version}$, $\texttt{user\_agent}$, $\texttt{validation}$, $\texttt{solution}$, $\texttt{type}$, $\texttt{learn\_session\_id}$, $\texttt{topic\_id}$, $\texttt{is\_closed}$, $\texttt{type\_id}$, \\ $\texttt{is\_accepted}$, $\texttt{event\_id}$, $\texttt{session\_id}$, $\texttt{tracking\_data}$, \\ $\texttt{event\_type}$. Also, we are dropping the $\texttt{evaluation}$ and $\texttt{input}$ columns because we are not interested in whether a question is correct or not but in the result obtained in the whole level check.
+
+Moreover, the timestamp we get from the original raw data will be transformed to a $\texttt{datetime}$ object via the function $\texttt{to\_datetime}$ of the pandas library taking into account the fact that the timestamp given is in milliseconds to further extract the week number. We need to compute the week number to extract features such as the $\texttt{num\_actions\_per\_week}$ or $\texttt{num\_weeks\_per\_user}$ because we want to analyse the behaviour of the students over time.
+
+Time series will be used to check if regular students will perform better than those who do not have regular habits when using the platform. In other words, does regularity influence a student’s performance in the level checks done on the platform?\\
+
+We proceed onto experiments separated in 2 different approaches. Each of these approaches features a \textbf{clustering} and a \textbf{classification} part. Both techniques are applied to a different set of features to avoid data leakage through the experiment. They are chosen for the following reasons:
+
+\begin{itemize}
+    \item \textbf{Clustering} - The goal is to try to \textbf{identify and separate} according to behaviors detected in the raw data. This is a first naive approach towards grouping students with similar learning processes. Moreover, in an attempt to leverage the clustering, we also train a classifier for each clustered group. We hope to increase the classifier's accuracy by proceeding this way.
+    \item \textbf{Classification} - This technique is used to separate classes according to our created labels. Therefore, we train a group of classifiers on a class-balanced training set. The group of classifiers includes \textit{1 classifier} for the whole training data, and \textit{1 classifier per cluster}. the goal of it is to measure the predictive potential of the data regarding students' improvement. Then, if the classification technique allows it, we retrieve and analyze the classificator's coefficients to gain insights on the features important for the classification.
+\end{itemize}
+
+\subsection{A1}\label{subsec:A1}
+{\color{red} (NICO) Description of methodology.}
+
+
+Clustering is performed based on a set of time agnostic features for each user. These features include: counts of each significant action (an action with a transaction token); length of time on the platform, and a set of so-called \textbf{regularity} features. The latter is a set of metrics which measure to what extent user patterns repeat of chosen time periods, for example over hours of the day, days of the week, or weeks of the month. For instance, one feature, \texttt{PWD} -- an abbreviation of \textit{peak on weekday} -- measures if a users activity is concentrated around days of the week, based on the entropy of the histogram of the user's weekly activity. Figure \ref{fig:PWHex} illustrates the counts that the \texttt{PWD} metric is measuring. We refer the reader to \cite{quantifyreg} to find a detailed description of all of the features.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{reports/figures/PWHex.jpg}
+    \caption{Illustrative plot of daily activity for user 387650. We find that this user completes significant actions on every day of the week except for the weekend, with peaks on Tuesday and Friday.}
+    \label{fig:PWHex}
+\end{figure}
+
+
+\subsection{A2}\label{subsec:A2}
+{\color{red}(NICO + MARIA) Description of methodology.}     
+\begin{table*}[!ht]
+  \caption{Time agnostic, aggregated features used in methodology A2 for a given user $i$ for all data recorded on the platform before level check $t$.}
+  \label{tab:A2features}
+  \begin{tabular}{cl}
+    \toprule
+    \textbf{Feature}&\textbf{Description}\\
+    \midrule
+    $\texttt{num\_weeks\_on}$ & number of weeks recorded having used the platform\\
+    $\texttt{num\_actions\_per\_week}$ & average number of actions with a transaction token per week\\
+    $\texttt{FDH}$ & measures the extent to which the hourly pattern of user’s activities is repeating over days \\
+    $\texttt{FWH}$ & measures if the hourly pattern of activities is repeating over weeks\\
+    $\texttt{FWD}$ & captures if the daily pattern of activities is repeating over weeks\\
+    $\texttt{eng\_score}$ & binary indicator of `high' user engagement\\
+    \bottomrule
+    \end{tabular}
+\end{table*}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{reports/figures/eng_score_hist.jpg}
+    \caption{Caption}
+    \label{fig:eng_score}
+\end{figure}
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{reports/figures/feature_corr.jpg}
+    \caption{Correlation heatmap between all the features. Note we have relabelled $\texttt{num\_actions\_per\_week}$ to \#actions and $\texttt{num\_weeks\_on}$ to \#weeks for display purposes.}
+    \label{fig:feature_corr}
+\end{figure}
+
+
+{\color{red}Clustering...}
+
+A decision tree classifier based on behavioural features was chosen due to the very interpretable nature of such a model. Indeed, it allows for the categorisation of students based on quantitative metrics on usage of the platform, while also ranking the importance of the behavioural features, which help us in answering our research question. 
+
+Let $N$ be the number of users and $L_i$ be the number of level checks user $i$ has completed. For each $i \in \{1,\ldots,N\}$ and $t \in \{1, \ldots, L_i\}$, the data fed into the decision tree classifier is a vector $x_i^t = (x_{i1}^t, x_{i2}^t, \ldots, x_{i6}^t)$, where $x_{i1}$ is a positive integer, $x_{ik}$ for $k=2,3,4$ is a positive real number and $x_{i6} \in \{0,1\}$. The features $x_{ik}$ for $k=1,\ldots, 6$ are listed in Table 
+\ref{tab:A2features}. Note the index $t$ is ordered in time. 
+
+To elaborate further, $x_{ik}$ for $k=2,3,4$ are \textbf{frequency-based} regularity features taken from \cite{quantifyreg}. In brief, these features find the spectral density of the time series generated by recording student actions, and subsequently detecting any important frequencies within the time series. This serves to identify with what frequency students repeat certain patterns of specified time periods: for the features \texttt{FDH}, \texttt{FWH} and \texttt{FWD} these are hours-across-day patterns (e.g. a user is active at 8AM every morning), hour-across-week patterns (e.g. a user is active 8AM every \textit{Monday}) and days-across-week (e.g. a user is active every \textit{Monday}) patterns respectively. Notably, the features decrease in granularity, while each capturing interesting snapshots of student behaviour. 
+
+An `engagement score', inspired by \cite{student_engagement}, records whether a student demonstrated that they performed activities directly related to learning (submitting answers to questions and going to theory sections of the app) more than other students. To quantify this, if for a given user, the two aforementioned actions comprised more than $25\%$ of all actions recorded in $\texttt{num\_actions\_per\_week}$, then they were given an engagement score of $1$ and $0$ otherwise. We remark that each of these features aim to quantify some form of consistent behavioural pattern on the platform, ranging from simply being present on the platform, to using it in a repeated manner over a long period of time. 
+
+\section{Results}\label{sec:results}
+{\color{red}NICO (A1), MARIA (A2)}
+\subsection{Experimental Evaluation}\label{subsec:eval}
+{\color{red}...}
+
+
+\section{Discussion}\label{sec:discussion}
+
+{\color{red}
+\begin{itemize}
+\item Justification: (NICO) Choice to switch the order of clustering and classification going from A1 to A2. 
+    \item Justification: (NICO + MARIA) Failure of clustering
+    \item Justification: (NICO +MARIA) Wild variation in accuracy upon changing elements of the modelling procedure/features
+\end{itemize}
+
+}
+
+Our results demonstrate that differing patterns of student behaviours certainly influence their performance on the platform. We could not identify a specific optimal behavior, and our highest prediction accuracy confirmed the `common sense' answer to our question: the more time you spend on the platform, the better you will tend to achieve. Succinctly, consistency begets attainment. 
+
+These results, however, highlight one key difficulty with our approach. Extracting a meaningful measure of human behaviour through myriad, anonymous clickstreams is a monumental task with many concerns and limitations \cite{meaningfulmeasures}. Human behaviour is an extremely nuanced piece of our being, and the advent of Big Data gives scientists a new avenue through which to understand it. Nevertheless, more advanced techniques and methods need to be developed in order to extract precise patterns that could reasonably have a causal effect on the outcome, as this is the ultimate goal; that is, for each student to have a personalised education. 
+
+
+
+
+
+\section{Conclusion and Future Works}\label{sec:conclusion}
+
+{\color{red} To conclude ... summarise work}.
+
+In future work, we suggest that the results of our work be used to inform an experiment in which the inverse approach is taken. That is, informed by data and neuroscientific and psychological literature, conduct a (conditionally) randomised experiment in which students are exposed to -- or, forced to exhibit -- a particular behaviour or structure, and appeal to the field of causal inference in order to determine any effect on attainment, by comparing and contrasting enforced behavioural patterns. For example, students might be use the platform solely as a homework device, or it might be used in conjunction with classroom learning. In this way, educators can begin to narrow the scope on what behavioural patterns lead to success, which could work in tandem with the development of machine learning models, in order to refine the patterns for which they search. 
+
+
+
+%%
+%% The acknowledgments section is defined using the "acks" environment
+%% (and NOT an unnumbered section). This ensures the proper
+%% identification of the section in the article metadata, and the
+%% consistent spelling of the heading.
+\begin{acks}
+To Paola, for the sustained interest and really fruitful and engaging topical discussions.
+\end{acks}
+
+%%
+%% The next two lines define the bibliography style to be used, and
+%% the bibliography file.
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{reports/refs.bib}
+
+
+%%
+%% If your work has an appendix, this is the place to put it.
+\appendix
+
+\section{Online Resources}
+
+\begin{itemize}
+    \item Python resources discussion here?
+\end{itemize}
+
+
+
+
+\end{document}
+\endinput
+%%
+%% End of file `sample-sigplan.tex'.
