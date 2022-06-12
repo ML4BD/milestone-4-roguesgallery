@@ -93,6 +93,7 @@
 %%\citestyle{acmauthoryear}
 
 \usepackage{csquotes}
+\usepackage{subcaption}
 \settopmatter{printfolios=true}
 %%
 %% end of the preamble, start of the body of the document source.
@@ -157,7 +158,7 @@ In this report, we present the results of a learning analytics study. The analyz
 %%
 %% Keywords. The author(s) should pick words that accurately describe
 %% the work being presented. Separate the keywords with commas.
-\keywords{datasets, regularity, decision trees, time series classification, prediction, clustering, lernnavi, moocs, education, student attainment}
+\keywords{datasets, regularity, decision trees, random forest classifier, time series classification, prediction, clustering, lernnavi, moocs, education, student attainment}
 %% A "teaser" image appears between the author and affiliation
 %% information and the body of the document, and typically spans the
 %% page.
@@ -200,6 +201,96 @@ Innately, we are all aware of the fact that self-improvement demands commitment.
 \end{itemize}
 }
 
+The educational platform Lernnavi provided us with a series of datasets reflecting the usage of the platform, among which $\texttt{learn\_sessions\_transactions}$, $\texttt{users}$, $\texttt{events}$ and $\texttt{transactions}$ will be used to carry out our research work.
+
+The $\texttt{learn\_sessions\_transactions}$ dataset contains information about the sessions of the platform. The sessions describe a learn or a level check session started and/or finished by a user and they are sorted chronologically, row by row. Additionally, for each session, there are one or more associated transactions (i.e., answers to tasks in that student's session).
+
+The $\texttt{users}$ dataset contains demographic information of the users of the educational platform. The $\texttt{events}$ dataset describe the events done by the users in the platform. Finally, the $\texttt{transactions}$ dataset reflects the multiple user transactions (e.g., answering a question) for each session.
+
+The detailed feature description of the datasets is shown in the Tables \ref{tab:learn}, \ref{tab:users}, \ref{tab:events} and \ref{tab:transactions}.
+
+\begin{table*}[!ht]
+  \caption{Feature description of the $\texttt{learn\_sessions\_transactions}$ dataset.}
+  \label{tab:learn}
+  \begin{tabular}{cl}
+    \toprule
+    \textbf{Feature}&\textbf{Description}\\
+    \midrule
+    $\texttt{learn\_session\_id}$ & Unique identifier for each learn session \\
+    $\texttt{transaction\_id}$ & Transaction identifier, used to link with transactions table \\
+    $\texttt{topicId}$ & Identifier of the topic this session was about \\
+    $\texttt{max\_num\_tasks}$ & Maximum number of tasks included in this session (only relevant for the learn session) \\
+    $\texttt{is\_closed}$ & If this session has been finished ($1$: finished; $0$: not finished) \\
+    $\texttt{type\_id}$ & If this session is a learn or level check ($1$: learn; $2$: level check) \\
+    $\texttt{is\_accepted}$ & If the user finally accepted the result of this session ($1$: accpeted; $0$: refused). \\
+    \bottomrule
+    \end{tabular}
+\end{table*}
+
+\begin{table*}[!ht]
+  \caption{Feature description of the $\texttt{users}$ dataset.}
+  \label{tab:users}
+  \begin{tabular}{cl}
+    \toprule
+    \textbf{Feature}&\textbf{Description}\\
+    \midrule
+    $\texttt{user\_id}$ & Personal identifier of user in database \\
+    $\texttt{gender}$ & Only three values: male, female or missing \\
+    $\texttt{canton}$ & Swiss canton \\
+    $\texttt{class\_level}$ & School year in swiss system \\
+    $\texttt{class\_code}$ & Identifier of student's class. There are students that are using the platform as part of their school work \\
+    \bottomrule
+    \end{tabular}
+\end{table*}
+
+\begin{table*}[!ht]
+  \caption{Feature description of the $\texttt{events}$ dataset.}
+  \label{tab:events}
+  \begin{tabular}{cl}
+    \toprule
+    \textbf{Feature}&\textbf{Description}\\
+    \midrule
+    $\texttt{event\_id}$ & Identifier of event in database \\
+    $\texttt{user\_id}$ & User who performed the event \\
+    $\texttt{timestamp}$ & Timestamp of event \\
+    $\texttt{category}$ & Classification of action (task, general, statistics, etc) \\
+    $\texttt{action}$ & Type of action performed \\
+    $\texttt{event\_type}$ & Whether the event required students to view or to click \\
+    $\texttt{transaction\_token}$ & Used to link to $\texttt{transactions}$ table \\
+    $\texttt{session\_id}$ & During which session the event took place \\
+    $\texttt{tracking\_data}$ & Optional content associated to this event (e.g., the new points mastered for a topic) \\
+    \bottomrule
+    \end{tabular}
+\end{table*}
+
+\begin{table*}[!ht]
+  \caption{Feature description of the $\texttt{transactions}$ dataset. The features $\texttt{document\_id}$ and $\texttt{document\_version}$ can be used to merge with the $\texttt{document}$ table}
+  \label{tab:transactions}
+  \begin{tabular}{cl}
+    \toprule
+    \textbf{Feature}&\textbf{Description}\\
+    \midrule
+    $\texttt{transaction\_id}$ & Unique identifier for each transaction \\
+    $\texttt{transaction\_token}$ & Used to join with events table \\
+    $\texttt{user\_id}$ & User who performed the transaction \\
+    $\texttt{document\_id}$ & Document that was answered in transaction \\
+    $\texttt{document\_version}$ & Version of document that was answered \\
+    $\texttt{evaluation}$ & Whether the user answered correctly or not. It is possible that it was only partially right \\
+    $\texttt{input}$ & Answer the user gave \\
+    $\texttt{start\_time}$ & Timestamp of when the user started answering \\
+    $\texttt{commit\_time}$ & Timestamp of when the user submitted the answer \\
+    $\texttt{user\_agent}$ & The browser that the user used \\
+    $\texttt{validation}$ & Used to validate the format of the input \\
+    $\texttt{solution}$ & Solution to question \\
+    $\texttt{type}$ Type of question \\
+    \bottomrule
+    \end{tabular}
+\end{table*}
+
+An study on the $\texttt{gender}$, $\texttt{canton}$ and $\texttt{class\_level}$ of the users of the platform was also performed.
+
+We remark that there is a geographical element to the data (shown in Figures \ref{fig:my_label} and \ref{fig:cantonal_representation}), and this is important because it might introduce mixed effects between the groups of students by region. Consequently we investigated to some degree the cantonal representation within the dataset and how activity on the platform varied with location. At this stage it is quite preliminary is essentially an aperçu into what additional features we may need to include in the model for more accurate results (find more details in the associated notebook).
+
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{reports/figures/num_per_canton.jpg}
@@ -214,6 +305,21 @@ Innately, we are all aware of the fact that self-improvement demands commitment.
     \label{fig:cantonal_representation}
 \end{figure*}
 
+Furthermore, we decide not to disclose based on the gender on the users since the difference between the percentage of females and males is not sufficiently large as shown in Figures \ref{} and \ref{}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{reports/figures/p}
+    \caption{Bar plot of the number of students per gender. There are almost the same number of students per gender.}
+    \label{fig:my_label}
+\end{figure}
+
+\begin{figure*}[!ht]
+    \centering
+    \includegraphics[width=\linewidth]{reports/figures/.jpg}
+    \caption{Pie chart of the \% of students per gender.}
+    \label{fig:cantonal_representation}
+\end{figure*}
 
 \section{The Proposed Approaches}\label{sec:propapp}
 
@@ -223,12 +329,11 @@ Innately, we are all aware of the fact that self-improvement demands commitment.
 \end{itemize}
 }
 
-Our dataset after the cleaning process consists of 790'425 rows corresponding to actions of
-users on the platform. For each row, the following features are listed as columns:
+Our dataset after the cleaning process consists of $790'425$ rows corresponding to actions of users on the platform. For each row, the following features shown in Table \ref{tab:features} are listed as columns.
 
 \begin{table*}[!ht]
   \caption{Time agnostic, aggregated features used in methodology A2 for a given user $i$ for all data recorded on the platform before level check $t$.}
-  \label{tab:A2features}
+  \label{tab:features}
   \begin{tabular}{cl}
     \toprule
     \textbf{Feature}&\textbf{Description}\\
@@ -253,32 +358,43 @@ The information corresponding to the level checks performed by the users of the 
 Therefore, each \textbf{sample} in our classification training data is constituted of chosen \textbf{features} and a \textbf{label}. The features (varying depending on the selected approach) are information up to a specific week preceeding the level check week. The label is the result of the aggregated change in mastery score i.e. whether the student mostly improved its level check score or decreased it. \textit{Please refer to the details on each approach to illustrate the features-label in each case.}
 
 \begin{figure}
-    \centering
-    \includegraphics[width=\linewidth]{reports/figures/PWHex.jpg}
-    \vspace{-2cm}
-    \begin{subfigure}[h]{0.5\textwidth}
-            \includegraphics[scale=1, natwidth=193px,natheight=197px]{reports/figures/hisprinzipbild.jpg}
-        \caption{Prinzipbild \cite{Tipl}}
-        \label{Prinzipbild}
-    \end{subfigure}
-    \begin{subfigure}[h]{0.5\textwidth}
-        \vspace{2.8cm}
-        \includegraphics[scale=1, natheight=115px,natwidth=263px]{img/realerSensor.jpg}
-            \caption{Schnitt realer Sensor \cite{Pat}}
-        \label{realSensor}
-    \end{subfigure}
-    \caption{Caption.}
-    \label{fig:histograms}
+     \centering
+     \begin{subfigure}[b]{\linewidth}
+         \centering
+         \includegraphics[width=0.82\linewidth]{reports/figures/histogram_level_checks.png}
+         \caption{Histogram of the number of \emph{level checks} performed by the users of the platform.}
+         \label{fig:level_cheks}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{\linewidth}
+         \centering
+         \includegraphics[width=0.82\linewidth]{reports/figures/histogram_num_participations.png}
+         \caption{Histogram of the number of \emph{participations} performed by the users of the platform.}
+         \label{fig:participations}
+     \end{subfigure}
+     \medskip
+     \begin{subfigure}[b]{\linewidth}
+         \centering
+         \includegraphics[width=0.82\linewidth]{reports/figures/histogram_number_of_actions_per_week.png}
+         \caption{Histogram of the number of \emph{actions per week} performed by the users of the platform.}
+         \label{fig:actions_per_week}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{\linewidth}
+         \centering
+         \includegraphics[width=0.82\linewidth]{reports/figures/histogram_number_of_weeks_per_user.png}
+         \caption{Histogram of the number of \emph{weeks per user} in the platform.}
+         \label{fig:weeks_per_user}
+     \end{subfigure}
+        \caption{Histograms of some of the numerical features presented.}
+        \label{fig:histograms}
 \end{figure}
 
-By plotting the histograms of some of the numerical features (\emph{`num\_checks'}, \emph{`num\_participations'}, \\ \emph{`num\_actions\_per\_week'} and \emph{`num\_weeks\_per\_user'}) (Figure \ref{fig:histograms}), we can clearly see that none of them comes from a normal distribution. Indeed, they are all right skewed, which comes from the fact that only a few students are very active on the platform.
+By plotting the histograms of some of the numerical features ($\texttt{num\_checks}$, $\texttt{num\_participations}$, \\ $\texttt{num\_actions\_per\_week}$ and $\texttt{num\_weeks\_per\_user}$) (Figure \ref{fig:histograms}), we can clearly see that none of them comes from a normal distribution. Indeed, they are all right skewed, which comes from the fact that only a few students are very active on the platform.
 
-We also remark that there is a geographical element to the data, and this is important because it might introduce mixed effects between the groups of students by region. Consequently we investigated to some degree the cantonal representation within the dataset and how activity on the platform varied with location. At this stage it is quite preliminary is essentially an aperçu into what additional features we may need to include in the model for more accurate results (find more details in the associated notebook).
+\subsection{Data cleaning} \label{data:cleaning}
 
-In the data processing phase, we first remove users with no transaction data (i.e. we keep
-users that are both in the events table and in the transactions table). To continue, inactive
-users will also be removed from our dataset since we consider that they are not using the
-platform enough to extract any valuable conclusion from them.
+In the data processing phase, we first remove users with no transaction data (i.e. we keep users that are both in the events table and in the transactions table). To continue, inactive users will also be removed from our dataset since we consider that they are not using the platform enough to extract any valuable conclusion from them.
 
 Inactive students are students that are in one of the following situations:
 \begin{itemize}
@@ -288,7 +404,7 @@ Inactive students are students that are in one of the following situations:
 week with at least five significant actions. Moreover, the significant actions are the
 actions in the event table that are linked through the transaction token to the
 transactions table. As a consequence, we will exclude actions like $\texttt{LOGIN}$,
-$\texttt{LOGOUT}$ or $\texttt{NAVIGATE_DASHBOARD}$ from the list of significant actions.
+$\texttt{LOGOUT}$ or $\texttt{NAVIGATE\_DASHBOARD}$ from the list of significant actions.
 \end{itemize}
 Since our goal is to predict users' success in level checks based on their regularity in time, we are not interested in users who did not perform any level check. Moreover, we will remove untrackable students: those who never did any training question or theory reading event. The justification of the cleaning decision is simply that we are not interested in users that have not performed any training or preparation for the level checks because we cannot measure their regularity (since they have not used the platform enough).
 
@@ -304,14 +420,42 @@ We proceed onto experiments separated in 2 different approaches. Each of these a
 
 \begin{itemize}
     \item \textbf{Clustering} - The goal is to try to \textbf{identify and separate} according to behaviors detected in the raw data. This is a first naive approach towards grouping students with similar learning processes. Moreover, in an attempt to leverage the clustering, we also train a classifier for each clustered group. We hope to increase the classifier's accuracy by proceeding this way.
-    \item \textbf{Classification} - This technique is used to separate classes according to our created labels. Therefore, we train a group of classifiers on a class-balanced training set. The group of classifiers includes \textit{1 classifier} for the whole training data, and \textit{1 classifier per cluster}. the goal of it is to measure the predictive potential of the data regarding students' improvement. Then, if the classification technique allows it, we retrieve and analyze the classificator's coefficients to gain insights on the features important for the classification.
+    \item \textbf{Classification} - This technique is used to separate classes according to our created labels. Therefore, we train a group of classifiers on a class-balanced training set. The group of classifiers includes \textit{1 classifier} for the whole training data, and \textit{1 classifier per cluster}. The goal of it is to measure the predictive potential of the data regarding students' improvement. Then, if the classification technique allows it, we retrieve and analyze the classificator's coefficients to gain insights on the features important for the classification.
 \end{itemize}
 
 \subsection{A1}\label{subsec:A1}
 {\color{red} (NICO) Description of methodology.}
 
+The first approach features a \textit{time-agnostic} (no time dimension in the data) clustering and a time series classification. We describe both.
 
-Clustering is performed based on a set of time agnostic features for each user. These features include: counts of each significant action (an action with a transaction token); length of time on the platform, and a set of so-called \textbf{regularity} features. The latter is a set of metrics which measure to what extent user patterns repeat of chosen time periods, for example over hours of the day, days of the week, or weeks of the month. For instance, one feature, \texttt{PWD} -- an abbreviation of \textit{peak on weekday} -- measures if a users activity is concentrated around days of the week, based on the entropy of the histogram of the user's weekly activity. Figure \ref{fig:PWHex} illustrates the counts that the \texttt{PWD} metric is measuring. We refer the reader to \cite{quantifyreg} to find a detailed description of all of the features.
+The \textbf{clustering} is performed based on a set of time agnostic features for each user. The features are computed over the whole study period of 40 weeks. They include: \textbf{counts of each significant action} (an action with a transaction token); \textbf{length of time spent} on the platform, and a set of so-called \textbf{regularity features}\cite{quantifyreg}. The latter is a set of metrics which measure to what extent user patterns repeat of chosen time periods, for example over hours of the day, days of the week, or weeks of the month. For instance, one feature, \texttt{PWD} -- an abbreviation of \textit{peak on weekday} -- measures if a users activity is concentrated around days of the week, based on the entropy of the histogram of the user's weekly activity. Figure \ref{fig:PWHex} illustrates the counts that the \texttt{PWD} metric is measuring. We refer the reader to \cite{quantifyreg} to find a detailed description of all of the features. Moreover, we use the \textbf{K-Means clustering} technique together with the \textbf{Silhouette Score} measure in order to compute the optimal number of cluster. K-Means is selected as 
+
+The \textbf{classification} is done over a set of time series. Contrary to the clustering phase during which each user in the training set corresponds to a sample, the classification uses time series, one for each level check. The training sample is formed by the weekly data for the student having the level check, up to the week preceding the level check. The weekly data includes the total \textit{number of actions per week}, the \textbf{time spent} on the platform during this week, \textbf{count of actions} for the selected relevant actions. Please see Figure \ref{tab:A1_feature_vectors} for a complete list of the feature aliases.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|}
+    \hline
+        Clustering Features & Classification Features \\ \hline
+        \texttt{PHD} & \texttt{num\_actions\_per\_week} \\ 
+        \texttt{PWD} & \texttt{elapsed\_time} \\
+        \texttt{WS1} & \texttt{REVIEW\_TASK} \\ 
+        \texttt{WS2} &\texttt{SKIP} \\ 
+        \texttt{WS3} &\texttt{CLOSE} \\ 
+        \texttt{FDH} &\texttt{SUBMIT\_ANSWER} \\ 
+        \texttt{FWH} &\texttt{GO\_TO\_THEORY} \\ 
+        \texttt{FWD} &\texttt{NEXT} \\ 
+        &\texttt{VIEW\_QUESTION} \\ 
+        &\texttt{GO\_TO\_BUG\_REPORT} \\ 
+        &\texttt{OPEN\_FEEDBACK} \\ 
+        &\texttt{CLOSE\_FEEDBACK} \\ 
+        &\texttt{GO\_TO\_COMMENTS} \\ 
+        &\texttt{SHARE} \\ 
+        &\texttt{REQUEST\_HINT} \\ \hline
+    \end{tabular}
+    \caption{Features details for clustering and classification in approach 1. For details regarding the regularity metrics, please refer to \cite{quantifyreg}.}
+    \label{tab:A1_feature_vectors}
+\end{table}
 
 \begin{figure}
     \centering
@@ -323,15 +467,46 @@ Clustering is performed based on a set of time agnostic features for each user. 
 
 \subsection{A2}\label{subsec:A2}
 {\color{red}(NICO + MARIA) Description of methodology.}     
+
+The second approach inverts the type of features fed to the clustering and classification. In this approach, we first cluster our user time series, and then feed time agnostic features to the classifier. We describe both.
+
+The clustering is done on the time series of the users. Similarly to the time series classification of approach 1, we aggregate data on a weekly basis. Thus for each user, we create a vector for each week containing the following information: total \textbf{number of actions} performed during the week, \textbf{time spent} on the platform during the week, and the \textbf{count of some selected relevant actions} for the week. Please see table \ref{tab:A2_feature_vectors} for a complete list of the features aliases.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|}
+    \hline
+        Clustering Features & Classification Features \\ \hline
+        \texttt{num\_actions\_per\_week} & \texttt{num\_weeks\_on}\\ 
+        \texttt{elapsed\_time} & \texttt{num\_actions\_per\_week}\footnote{Time agnostic feature. Different from the time series' weekly feature.}\\
+        \texttt{REVIEW\_TASK} & \texttt{FDH}\\ 
+        \texttt{SKIP} & \texttt{FWH} \\ 
+        \texttt{CLOSE} & \texttt{FWD} \\ 
+        \texttt{SUBMIT\_ANSWER} & \texttt{eng\_score}\\ 
+        \texttt{GO\_TO\_THEORY} & \\ 
+        \texttt{NEXT} & \\ 
+        \texttt{VIEW\_QUESTION} & \\ 
+        \texttt{GO\_TO\_BUG\_REPORT} & \\ 
+        \texttt{OPEN\_FEEDBACK} & \\ 
+        \texttt{CLOSE\_FEEDBACK} & \\ 
+        \texttt{GO\_TO\_COMMENTS} & \\ 
+        \texttt{SHARE} & \\ 
+        \texttt{REQUEST\_HINT} & \\ \hline
+    \end{tabular}
+    \caption{Features details for clustering and classification in approach 2.}
+    \label{tab:A2_feature_vectors}
+\end{table}
+
+
 \begin{table*}[!ht]
-  \caption{Time agnostic, aggregated features used in methodology A2 for a given user $i$ for all data recorded on the platform before level check $t$.}
+  \caption{Description of the time agnostic, aggregated features used in approach 2 for a given user $i$ for all data recorded on the platform before level check $t$.}
   \label{tab:A2features}
   \begin{tabular}{cl}
     \toprule
     \textbf{Feature}&\textbf{Description}\\
     \midrule
     $\texttt{num\_weeks\_on}$ & number of weeks recorded having used the platform\\
-    $\texttt{num\_actions\_per\_week}$ & average number of actions with a transaction token per week\\
+    $\texttt{num\_actions\_per\_week}$\footnote{Time agnostic feature. Different from the time series' weekly feature.} & average number of actions with a transaction token per week\\
     $\texttt{FDH}$ & measures the extent to which the hourly pattern of user’s activities is repeating over days \\
     $\texttt{FWH}$ & measures if the hourly pattern of activities is repeating over weeks\\
     $\texttt{FWD}$ & captures if the daily pattern of activities is repeating over weeks\\
