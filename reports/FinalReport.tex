@@ -305,23 +305,23 @@ We remark that there is a geographical element to the data (shown in Figures \re
     \label{fig:cantonal_representation}
 \end{figure*}
 
-Furthermore, we decide not to disclose based on the gender on the users since the difference between the percentage of females and males is not sufficiently large as shown in Figures \ref{} and \ref{}.
+Furthermore, we decide not to disclose based on the gender on the users since the difference between the percentage of females and males is not sufficiently large as shown in Figures \ref{fig:gender} and \ref{fig:pie_chart}.
 
 \begin{figure}
     \centering
-    \includegraphics[width=\linewidth]{reports/figures/p}
+    \includegraphics[width=\linewidth]{reports/figures/num_per_gender.jpg}
     \caption{Bar plot of the number of students per gender. There are almost the same number of students per gender.}
-    \label{fig:my_label}
+    \label{fig:gender}
 \end{figure}
 
-\begin{figure*}[!ht]
+\begin{figure}
     \centering
-    \includegraphics[width=\linewidth]{reports/figures/.jpg}
+    \includegraphics[width=0.75\linewidth]{reports/figures/pie_chart.png}
     \caption{Pie chart of the \% of students per gender.}
-    \label{fig:cantonal_representation}
-\end{figure*}
+    \label{fig:pie_chart}
+\end{figure}
 
-\section{The Proposed Approaches}\label{sec:propapp}
+\section{Data cleaning} \label{data:cleaning}
 
 {\color{red}
 \begin{itemize}
@@ -392,8 +392,6 @@ Therefore, each \textbf{sample} in our classification training data is constitut
 
 By plotting the histograms of some of the numerical features ($\texttt{num\_checks}$, $\texttt{num\_participations}$, \\ $\texttt{num\_actions\_per\_week}$ and $\texttt{num\_weeks\_per\_user}$) (Figure \ref{fig:histograms}), we can clearly see that none of them comes from a normal distribution. Indeed, they are all right skewed, which comes from the fact that only a few students are very active on the platform.
 
-\subsection{Data cleaning} \label{data:cleaning}
-
 In the data processing phase, we first remove users with no transaction data (i.e. we keep users that are both in the events table and in the transactions table). To continue, inactive users will also be removed from our dataset since we consider that they are not using the platform enough to extract any valuable conclusion from them.
 
 Inactive students are students that are in one of the following situations:
@@ -414,7 +412,9 @@ Additionally, features that are not useful for our study have been removed. The 
 
 Moreover, the timestamp we get from the original raw data will be transformed to a $\texttt{datetime}$ object via the function $\texttt{to\_datetime}$ of the pandas library taking into account the fact that the timestamp given is in milliseconds to further extract the week number. We need to compute the week number to extract features such as the $\texttt{num\_actions\_per\_week}$ or $\texttt{num\_weeks\_per\_user}$ because we want to analyse the behaviour of the students over time.
 
-Time series will be used to check if regular students will perform better than those who do not have regular habits when using the platform. In other words, does regularity influence a student’s performance in the level checks done on the platform?\\
+%Time series will be used to check if regular students will perform better than those who do not have regular habits when using the platform. In other words, does regularity influence a student’s performance in the level checks done on the platform?
+
+\section{The Proposed Approaches}\label{sec:propapp}
 
 We proceed onto experiments separated in 2 different approaches. Each of these approaches features a \textbf{clustering} and a \textbf{classification} part. Both techniques are applied to a different set of features to avoid data leakage through the experiment. They are chosen for the following reasons:
 
@@ -428,9 +428,9 @@ We proceed onto experiments separated in 2 different approaches. Each of these a
 
 The first approach features a \textit{time-agnostic} (no time dimension in the data) clustering and a time series classification. We describe both.
 
-The \textbf{clustering} is performed based on a set of time agnostic features for each user. The features are computed over the whole study period of 40 weeks. They include: \textbf{counts of each significant action} (an action with a transaction token); \textbf{length of time spent} on the platform, and a set of so-called \textbf{regularity features}\cite{quantifyreg}. The latter is a set of metrics which measure to what extent user patterns repeat of chosen time periods, for example over hours of the day, days of the week, or weeks of the month. For instance, one feature, \texttt{PWD} -- an abbreviation of \textit{peak on weekday} -- measures if a users activity is concentrated around days of the week, based on the entropy of the histogram of the user's weekly activity. Figure \ref{fig:PWHex} illustrates the counts that the \texttt{PWD} metric is measuring. We refer the reader to \cite{quantifyreg} to find a detailed description of all of the features. Moreover, we use the \textbf{K-Means clustering} technique together with the \textbf{Silhouette Score} measure in order to compute the optimal number of cluster. K-Means is selected as 
+The \textbf{clustering} is performed based on a set of time agnostic features for each user. The features are computed over the whole study period of 40 weeks. They include: \textbf{counts of each significant action} (an action with a transaction token); \textbf{length of time spent} on the platform, and a set of so-called \textbf{regularity features}\cite{quantifyreg}. The latter is a set of metrics which measure to what extent user patterns repeat of chosen time periods, for example over hours of the day, days of the week, or weeks of the month. For instance, one feature, \texttt{PWD} -- an abbreviation of \textit{peak on weekday} -- measures if a users activity is concentrated around days of the week, based on the entropy of the histogram of the user's weekly activity. Figure \ref{fig:PWHex} illustrates the counts that the \texttt{PWD} metric is measuring. We refer the reader to \cite{quantifyreg} to find a detailed description of all of the features. Moreover, we use the \textbf{K-Means clustering} technique together with the \textbf{Silhouette Score} measure in order to compute the optimal number of cluster. K-Means is selected as it is a simple and scalable algorithm which produced reasonable computation times and results.
 
-The \textbf{classification} is done over a set of time series. Contrary to the clustering phase during which each user in the training set corresponds to a sample, the classification uses time series, one for each level check. The training sample is formed by the weekly data for the student having the level check, up to the week preceding the level check. The weekly data includes the total \textit{number of actions per week}, the \textbf{time spent} on the platform during this week, \textbf{count of actions} for the selected relevant actions. Please see Figure \ref{tab:A1_feature_vectors} for a complete list of the feature aliases.
+The \textbf{classification} is done over a set of time series. Contrary to the clustering phase during which each user in the training set corresponds to a sample, the classification uses time series, one for each level check. The training sample is formed by the weekly data for the student having the level check, up to the week preceding the level check. The weekly data includes the total \textit{number of actions per week}, the \textbf{time spent} on the platform during this week, \textbf{count of actions} for the selected relevant actions. Please see Figure \ref{tab:A1_feature_vectors} for a complete list of the feature aliases. Moreover, we use the \emph{tslearn}\cite{tslearn} library providing us with a collection of machine learning techniques adapted to time series. Among the proposed classicators, we select a \textbf{time series support vector} and a \textbf{time series K-NN} classification technique. Further details on their use are provided in section \ref{subsec:eval}.
 
 \begin{table}[h]
     \centering
@@ -470,7 +470,7 @@ The \textbf{classification} is done over a set of time series. Contrary to the c
 
 The second approach inverts the type of features fed to the clustering and classification. In this approach, we first cluster our user time series, and then feed time agnostic features to the classifier. We describe both.
 
-The clustering is done on the time series of the users. Similarly to the time series classification of approach 1, we aggregate data on a weekly basis. Thus for each user, we create a vector for each week containing the following information: total \textbf{number of actions} performed during the week, \textbf{time spent} on the platform during the week, and the \textbf{count of some selected relevant actions} for the week. Please see table \ref{tab:A2_feature_vectors} for a complete list of the features aliases.
+The \textbf{clustering} is done on the time series of the users. Similarly to the time series classification of approach 1, we aggregate data on a weekly basis. Thus for each user, we create a vector per week containing the following information: total \textbf{number of actions} performed during the week, \textbf{time spent} on the platform during the week, and the \textbf{count of some selected relevant actions} for the week. Please see table \ref{tab:A2_feature_vectors} for a complete list of the features aliases. Moreover, we again use the methods from the  \emph{tslearn}\cite{tslearn} library. Here we use a \textbf{time series K-Means} clustering technique and a \textbf{kernelized version of the time series K-Means} i.e. a kernel function is applied to the time series before performing K-Means.
 
 \begin{table}[h]
     \centering
@@ -533,7 +533,7 @@ The clustering is done on the time series of the users. Similarly to the time se
 
 {\color{red}Clustering...}
 
-A decision tree classifier based on behavioural features was chosen due to the very interpretable nature of such a model. Indeed, it allows for the categorisation of students based on quantitative metrics on usage of the platform, while also ranking the importance of the behavioural features, which help us in answering our research question. 
+For the \textbf{classification}, a \textbf{decision tree classifier} based on behavioural features was chosen due to the very interpretable nature of such a model. Indeed, it allows for the categorisation of students based on quantitative metrics on usage of the platform, while also ranking the importance of the behavioural features, which helps us in answering our research question. 
 
 Let $N$ be the number of users and $L_i$ be the number of level checks user $i$ has completed. For each $i \in \{1,\ldots,N\}$ and $t \in \{1, \ldots, L_i\}$, the data fed into the decision tree classifier is a vector $x_i^t = (x_{i1}^t, x_{i2}^t, \ldots, x_{i6}^t)$, where $x_{i1}$ is a positive integer, $x_{ik}$ for $k=2,3,4$ is a positive real number and $x_{i6} \in \{0,1\}$. The features $x_{ik}$ for $k=1,\ldots, 6$ are listed in Table 
 \ref{tab:A2features}. Note the index $t$ is ordered in time. 
@@ -544,9 +544,13 @@ An `engagement score', inspired by \cite{student_engagement}, records whether a 
 
 \section{Results}\label{sec:results}
 {\color{red}NICO (A1), MARIA (A2)}
-\subsection{Experimental Evaluation}\label{subsec:eval}
-{\color{red}...}
+\subsection{Experiments}\label{subsec:eval}
 
+For each one of the approaches, we derive a series of experiments. As mentionned before, the goal is to cluster the data, and train a classifier on the clustered and non-clustered data. We first detail the design of the experiments and then explore the results.
+
+\subsection{Evaluation Results}\label{subsec:eval_results}
+
+For both approaches, we took the same guidelines regarding clustering followed by classification. For each approach, we detail 
 
 \section{Discussion}\label{sec:discussion}
 
