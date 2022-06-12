@@ -242,24 +242,8 @@ Furthermore, we decide not to disclose based on the gender on the users since th
 
 In the data processing phase, we first remove users with no transaction data (i.e. we keep users that are both in the events table and in the transactions table). To continue, inactive users will also be removed from our dataset since we consider that they are not using the platform enough to extract any valuable conclusion from them.
 
-Inactive students are students that are in one of the following situations:
-\begin{itemize}
-\item Students that have never performed a level check.
-\item Students that have not performed any $\texttt{GO\_TO\_THEORY}$ action and neither any $\texttt{SUBMIT\_ANSWER}$ action.
-\item Students that have at least two significant weeks. A \emph{significant week} is defined as a week with at least five significant actions. Moreover, the \emph{significant actions} are the actions in the event table that are linked through the transaction token to the transactions table. As a consequence, we will exclude actions like $\texttt{LOGIN}$, $\texttt{LOGOUT}$ or $\texttt{NAVIGATE\_DASHBOARD}$ from the list of significant actions.
-\end{itemize}
-Since our goal is to predict users' success in level checks based on their regularity in time, we are not interested in users who did not perform any level check. Moreover, we will remove untrackable students: those who never did any training question or theory reading event. The justification of the cleaning decision is simply that we are not interested in users that have not performed any training or preparation for the level checks because we cannot measure their regularity (since they have not used the platform enough).
-
-Finally, we will remove users that have not been using the educational platform sufficiently during several weeks. Thus, we remove users with less than two significant weeks since we want to have data from different weeks to apply time series techniques. In addition, a significant week is defined like above since we consider that a student can reach the minimum of five significant actions per week in the platform very easily.
-
-Additionally, features that are not useful for our study have been removed. The removed features are the following: $\texttt{transaction\_id}$, $\texttt{transaction\_token}$, $\texttt{document\_id}$, $\texttt{document\_version}$, $\texttt{user\_agent}$, $\texttt{validation}$, $\texttt{solution}$, \\ $\texttt{type}$, $\texttt{learn\_session\_id}$, $\texttt{topic\_id}$, $\texttt{is\_closed}$, $\texttt{type\_id}$, \\ $\texttt{is\_accepted}$, $\texttt{event\_id}$, $\texttt{session\_id}$, $\texttt{tracking\_data}$, \\ $\texttt{event\_type}$. Also, we are dropping the $\texttt{evaluation}$ and $\texttt{input}$ columns because we are not interested in whether a question is correct or not but in the result obtained in the whole level check.
-
-Moreover, the timestamp we get from the original raw data will be transformed to a $\texttt{datetime}$ object via the function $\texttt{to\_datetime}$ of the pandas library taking into account the fact that the timestamp given is in milliseconds to further extract the week number. We need to compute the week number to extract features such as the $\texttt{num\_actions\_per\_week}$ or $\texttt{num\_weeks\_per\_user}$ because we want to analyse the behaviour of the students over time.
-
-%Time series will be used to check if regular students will perform better than those who do not have regular habits when using the platform. In other words, does regularity influence a student’s performance in the level checks done on the platform?
-
 \begin{table*}[h]
-  \caption{Features obtain after the cleaning process.}
+  \caption{Features obtained after the cleaning process.}
   \label{tab:features}
   \begin{tabular}{cl}
     \toprule
@@ -279,6 +263,22 @@ Moreover, the timestamp we get from the original raw data will be transformed to
     \bottomrule
     \end{tabular}
 \end{table*}
+
+Inactive students are students that are in one of the following situations:
+\begin{itemize}
+\item Students that have never performed a level check.
+\item Students that have not performed any $\texttt{GO\_TO\_THEORY}$ action and neither any $\texttt{SUBMIT\_ANSWER}$ action.
+\item Students that have at least two significant weeks. A \emph{significant week} is defined as a week with at least five significant actions. Moreover, the \emph{significant actions} are the actions in the event table that are linked through the transaction token to the transactions table. As a consequence, we will exclude actions like $\texttt{LOGIN}$, $\texttt{LOGOUT}$ or $\texttt{NAVIGATE\_DASHBOARD}$ from the list of significant actions.
+\end{itemize}
+Since our goal is to predict users' success in level checks based on their regularity in time, we are not interested in users who did not perform any level check. Moreover, we will remove untrackable students: those who never did any training question or theory reading event. The justification of the cleaning decision is simply that we are not interested in users that have not performed any training or preparation for the level checks because we cannot measure their regularity (since they have not used the platform enough).
+
+Finally, we will remove users that have not been using the educational platform sufficiently during several weeks. Thus, we remove users with less than two significant weeks since we want to have data from different weeks to apply time series techniques. In addition, a significant week is defined like above since we consider that a student can reach the minimum of five significant actions per week in the platform very easily.
+
+Additionally, features that are not useful for our study have been removed. The removed features are the following: $\texttt{transaction\_id}$, $\texttt{transaction\_token}$, $\texttt{document\_id}$, $\texttt{document\_version}$, $\texttt{user\_agent}$, $\texttt{validation}$, $\texttt{solution}$, \\ $\texttt{type}$, $\texttt{learn\_session\_id}$, $\texttt{topic\_id}$, $\texttt{is\_closed}$, $\texttt{type\_id}$, \\ $\texttt{is\_accepted}$, $\texttt{event\_id}$, $\texttt{session\_id}$, $\texttt{tracking\_data}$, \\ $\texttt{event\_type}$. Also, we are dropping the $\texttt{evaluation}$ and $\texttt{input}$ columns because we are not interested in whether a question is correct or not but in the result obtained in the whole level check.
+
+Moreover, the timestamp we get from the original raw data will be transformed to a $\texttt{datetime}$ object via the function $\texttt{to\_datetime}$ of the pandas library taking into account the fact that the timestamp given is in milliseconds to further extract the week number. We need to compute the week number to extract features such as the $\texttt{num\_actions\_per\_week}$ or $\texttt{num\_weeks\_per\_user}$ because we want to analyse the behaviour of the students over time.
+
+%Time series will be used to check if regular students will perform better than those who do not have regular habits when using the platform. In other words, does regularity influence a student’s performance in the level checks done on the platform?
 
 Our dataset after the cleaning process consists of $790,425$ rows corresponding to actions of users on the platform. For each row, the features shown in Table \ref{tab:features} are listed as columns.
 
@@ -331,13 +331,13 @@ We proceed onto experiments separated in 2 different approaches. Each of these a
 \end{itemize}
 
 \subsection{A1}\label{subsec:A1}
-{\color{red} (NICO) Description of methodology.}
+%{\color{red} (NICO) Description of methodology.}
 
 The first approach features a \textit{time-agnostic} (no time dimension in the data) clustering and a time series classification. We describe both.
 
-The \textbf{clustering} is performed based on a set of time agnostic features for each user. The features are computed over the whole study period of 40 weeks. They include: \textbf{counts of each significant action} (an action with a transaction token); \textbf{length of time spent} on the platform, and a set of so-called \textbf{regularity features}\cite{quantifyreg}. The latter is a set of metrics which measure to what extent user patterns repeat of chosen time periods, for example over hours of the day, days of the week, or weeks of the month. For instance, one feature, \texttt{PWD} -- an abbreviation of \textit{peak on weekday} -- measures if a users activity is concentrated around days of the week, based on the entropy of the histogram of the user's weekly activity. Figure \ref{fig:PWHex} illustrates the counts that the \texttt{PWD} metric is measuring. We refer the reader to \cite{quantifyreg} to find a detailed description of all of the features. Moreover, we use the \textbf{K-Means clustering} technique together with the \textbf{Silhouette Score} measure in order to compute the optimal number of cluster. K-Means is selected as it is a simple and scalable algorithm which produced reasonable computation times and results.
+The \textbf{clustering} is performed based on a set of time agnostic features for each user. The features are computed over the whole study period of 40 weeks. They include: \textbf{counts of each significant action} (an action with a transaction token); \textbf{length of time spent} on the platform, and a set of so-called \textbf{regularity features} \cite{quantifyreg}. The latter is a set of metrics which measure to what extent user patterns repeat of chosen time periods, for example over hours of the day, days of the week, or weeks of the month. For instance, one feature, \texttt{PWD} -- an abbreviation of \textit{peak on weekday} -- measures if a users activity is concentrated around days of the week, based on the entropy of the histogram of the user's weekly activity. Figure \ref{fig:PWHex} illustrates the counts that the \texttt{PWD} metric is measuring. We refer the reader to \cite{quantifyreg} to find a detailed description of all of the features. Moreover, we use the \textbf{K-Means clustering} technique together with the \textbf{Silhouette Score} measure in order to compute the optimal number of cluster. K-Means is selected as it is a simple and scalable algorithm which produced reasonable computation times and results.
 
-The \textbf{classification} is done over a set of time series. Contrary to the clustering phase during which each user in the training set corresponds to a sample, the classification uses time series, one for each level check. The training sample is formed by the weekly data for the student having the level check, up to the week preceding the level check. The weekly data includes the total \textit{number of actions per week}, the \textbf{time spent} on the platform during this week, \textbf{count of actions} for the selected relevant actions. Please see Figure \ref{tab:A1_feature_vectors} for a complete list of the feature aliases. Moreover, we use the \emph{tslearn}\cite{tslearn} library providing us with a collection of machine learning techniques adapted to time series. Among the proposed classicators, we select a \textbf{time series support vector} and a \textbf{time series K-NN} classification technique. Further details on their use are provided in section \ref{subsec:eval}.
+The \textbf{classification} is done over a set of time series. Contrary to the clustering phase during which each user in the training set corresponds to a sample, the classification uses time series, one for each level check. The training sample is formed by the weekly data for the student having the level check, up to the week preceding the level check. The weekly data includes the total \textit{number of actions per week}, the \textbf{time spent} on the platform during this week, \textbf{count of actions} for the selected relevant actions. Please see Figure \ref{tab:A1_feature_vectors} for a complete list of the feature aliases. Moreover, we use the \emph{tslearn} \cite{tslearn} library providing us with a collection of machine learning techniques adapted to time series. Among the proposed classicators, we select a \textbf{time series support vector} and a \textbf{time series K-NN} classification technique. Further details on their use are provided in section \ref{subsec:eval}.
 
 \begin{table}[h]
     \centering
@@ -373,11 +373,11 @@ The \textbf{classification} is done over a set of time series. Contrary to the c
 
 
 \subsection{A2}\label{subsec:A2}
-{\color{red}(NICO + MARIA) Description of methodology.}     
+%{\color{red}(NICO + MARIA) Description of methodology.}     
 
 The second approach inverts the type of features fed to the clustering and classification. In this approach, we first cluster our user time series, and then feed time agnostic features to the classifier. We describe both.
 
-The \textbf{clustering} is done on the time series of the users. Similarly to the time series classification of approach 1, we aggregate data on a weekly basis. Thus for each user, we create a vector per week containing the following information: total \textbf{number of actions} performed during the week, \textbf{time spent} on the platform during the week, and the \textbf{count of some selected relevant actions} for the week. Please see table \ref{tab:A2_feature_vectors} for a complete list of the features aliases. Moreover, we again use the methods from the  \emph{tslearn}\cite{tslearn} library. Here we use a \textbf{time series K-Means} clustering technique and a \textbf{kernelized version of the time series K-Means} i.e. a kernel function is applied to the time series before performing K-Means.
+The \textbf{clustering} is done on the time series of the users. Similarly to the time series classification of approach 1, we aggregate data on a weekly basis. Thus for each user, we create a vector per week containing the following information: total \textbf{number of actions} performed during the week, \textbf{time spent} on the platform during the week, and the \textbf{count of some selected relevant actions} for the week. Please see table \ref{tab:A2_feature_vectors} for a complete list of the features aliases. Moreover, we again use the methods from the  \emph{tslearn} \cite{tslearn} library. Here we use a \textbf{time series K-Means} clustering technique and a \textbf{kernelized version of the time series K-Means} i.e. a kernel function is applied to the time series before performing K-Means.
 
 \begin{table}[h]
     \centering
@@ -425,7 +425,7 @@ The \textbf{clustering} is done on the time series of the users. Similarly to th
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{reports/figures/eng_score_hist.jpg}
-    \caption{Caption}
+    \caption{Proportion of actions which are answer submissions or going to theory.}
     \label{fig:eng_score}
 \end{figure}
 
@@ -438,7 +438,7 @@ The \textbf{clustering} is done on the time series of the users. Similarly to th
 \end{figure}
 
 
-{\color{red}Clustering...}
+%{\color{red}Clustering...}
 
 For the \textbf{classification}, a \textbf{decision tree classifier} and a \textbf{random forest classifier} based on behavioural features were chosen due to the very interpretable nature of such models. Indeed, it allows for the categorisation of students based on quantitative metrics on usage of the platform, while also ranking the importance of the behavioural features, which helps us in answering our research question. 
 
@@ -449,25 +449,22 @@ To elaborate further, $x_{ik}$ for $k=2,3,4$ are \textbf{frequency-based} regula
 
 An `engagement score', inspired by \cite{student_engagement}, records whether a student demonstrated that they performed activities directly related to learning (submitting answers to questions and going to theory sections of the app) more than other students. To quantify this, if for a given user, the two aforementioned actions comprised more than $25\%$ of all actions recorded in $\texttt{num\_actions\_per\_week}$, then they were given an engagement score of $1$ and $0$ otherwise. We remark that each of these features aim to quantify some form of consistent behavioural pattern on the platform, ranging from simply being present on the platform, to using it in a repeated manner over a long period of time. 
 
-\section{Results}\label{sec:results}
+\section{Experiments and Results}\label{sec:results}
 
-For each one of the approaches, we derive a series of experiments. As mentioned before, the goal is to cluster the data, and train a classifier on the clustered and non-clustered data. We first detail the design of the experiments and then explore the results.
-{\color{red}NICO (A1), MARIA (A2)}
-\subsection{Experiments}\label{subsec:eval}
-
-For both approaches, we followed the same guidelines regarding clustering followed by classification. For each approach, we detail what experiments were done.
+For each of the aforementioned approaches, we derive a series of experiments. In this section we detail the design of the experiments and then explore the results.
+%{\color{red}NICO (A1), MARIA (A2)}
 
 \subsubsection{A1}
-For the first approach, the clustering was done using the \textbf{K-Means} algorithm. For this experiment, we finetune the number of clusters \texttt{k} $\in \{2,3,\ldots, 10\}$. Then we use the \textbf{Silhouette Score} in order to see which clustering is most coherent to our data. \textit{Let us recall that the silhouette score evaluates how well distinguishable and identified the clusters are by rating their centers’ individuality and preciseness. It ranges from $1$ (perfectly differentiable and identified clusters) to $-1$ (overlapping clusters with close centers).}
+For the first approach, the clustering was done using the \textbf{K-Means} algorithm. For this experiment, we finetune the number of clusters \texttt{k} $\in \{2,3,\ldots, 10\}$. Then we use the \textbf{Silhouette Score} in order to see which clustering is most coherent to our data. %\textit{Let us recall that the silhouette score evaluates how well distinguishable and identified the clusters are by rating their centers’ individuality and preciseness. It ranges from $1$ (perfectly differentiable and identified clusters) to $-1$ (overlapping clusters with close centers).}
 
 The classification is done using 2 different classification techniques applied to time series. Namely, we classify for the clustered and non-clustered setting using the \texttt{TimeSeriesSVC} (support-vector technique) and \\ \texttt{KNeighborsTimeSeriesClassifier} (K-NN classification technique). For the former method, we could not perform experiments by varying the \texttt{kernel} parameter as the \textit{Global Alignment Kernel} \texttt{gak} \textbf{kernel} is the only one working for the time series classification. \textit{The GAK kernel is responsible for aligning the different time series before classification}. For the latter method, we had the possibility to tune the \textbf{number of considered neighbors}. However preliminary results with the default parameter showed that the model performed significantly worse than its support-vector counterpart. Therefore, we did not perform experiments on this dimension of the model. The default parameter used was \texttt{k=3}. Finally due to the significant amount of time necessary to train the classifier, we chose to perform experiments by varying the \textbf{number of samples} used for training in the range $[10, 3953]$. Let us note that the upper bound of this range is not reached for all experiments, however all experiments go up to at least $828$ samples.
 
 \subsubsection{A2}
-For the \textbf{second approach}, the clustering was done using 2 different time series clustering techniques. The techniques are \texttt{TimeSeriesKMeans} (K-NN based clustering techniques) and \texttt{KernelKMean} (variation of the former applying a kernel function before clustering). For the first technique, we vary the \textbf{number of clusters} in the integer range $[2, 6]$, the \textbf{maximum iterations} performed by the algorithm in the list $[50, 100]$, the tolerance criterion to indicate convergence in the list $[1e-5, 1e-6, 1e-7]$, the \textbf{distance metric} in the list $[\texttt{euclidean}, \texttt{dtw}]$, and whether the algorithm should use \textbf{inertia} or not.
+For the second approach, the clustering was done using 2 different time series clustering techniques. The techniques are \texttt{TimeSeriesKMeans} (K-NN based clustering techniques) and \texttt{KernelKMean} (variation of the former applying a kernel function before clustering). For the first technique, we vary the \textbf{number of clusters} in the integer range $[2, 6]$, the \textbf{maximum iterations} performed by the algorithm in the list $[50, 100]$, the tolerance criterion to indicate convergence in the list $[1e-5, 1e-6, 1e-7]$, the \textbf{distance metric} in the list $[\texttt{euclidean}, \texttt{dtw}]$, and whether the algorithm should use \textbf{inertia} or not. the second technique features hyper-parameter tuning on the applied kernel function in the list $[\texttt{gak}, \texttt{linear}, \texttt{poly}, \texttt{sigmoid}]$, and the number of clusters in the integer range $[2, 4]$.
 
 In the second part, we performed two experiments. In the first experiment, the classification step is carried out with all the behavioral features shown in Table \ref{tab:A2features}, whereas in the second experiment we left out the feature $\texttt{num\_weeks\_on}$.
 
-Both a \textbf{Decision Tree Classifier} and a \textbf{Random Forest Classifier} were trained on both experiments using the whole dataset since the clustering was not relevant. Hyperparameter tunning was performed using \textbf{Randomized Search} to determine the best parameters of each of the models.
+Both a \textbf{Decision Tree Classifier} and a \textbf{Random Forest Classifier} were trained on both experiments using the whole dataset since the clustering was not relevant. Hyperparameter tunning was performed using \textbf{Randomized Search} to determine the best parameters of each of the models using the grids described in Tables \ref{tab:grid_dt} and \ref{tab:grid_rf}.
 
 The parameters tuned for each of the models in both of the experiments with their respective best combinations can be found in the Tables \ref{tab:dc_1}, \ref{tab:dc_2}, \ref{tab:rf_1} and \ref{tab:rf_2}.
 
@@ -476,26 +473,41 @@ The Figures \ref{fig:hyp_decision_1} and \ref{fig:hyp_decision_2} show accuracy 
 The feature importance of each of the classifiers in both experiments is shown in Figures \ref{fig:fi_dc_1},
 \ref{fig:fi_dc_2}, \ref{fig:fi_rf_1} and \ref{fig:fi_rf_2}. As we can see, the most important feature in Experiment 1 is $\texttt{num\_weeks\_on}$ whereas in Experiment 2 is $\texttt{num\_actions\_per\_week}$. Surpringsingly, the regularity features computed ($\texttt{FDH}$, $\texttt{FWH}$, $\texttt{FWD}$ and $\texttt{eng\_score}$) have a low importance.
 
-\subsection{Evaluation}\label{subsec:eval_results}
+\subsection{Model Results and Evaluation}\label{subsec:eval_results}
 
-After having run the experiments, we measure the results using different metrics. These metrics depend on the clustering or classification step in the approach. For the clustering step, we use the \textbf{Silhouette Score} to measure the cluster relation to our data. For the classification step, we use 6 different metrics\cite{scikit-learn}, namely the \textbf{accuracy} (percentage of samples correctly classified), the \textbf{balanced accuracy} (accuracy taking class balance into account), the \textbf{adjusted balanced accuracy} (balanced accuracy accounting for chance in classification), the \textbf{F1 score} (harmonic mean of the precision and recall), the \textbf{weighted F1 score} (F1 score weighted by class support) and \textbf{Matthew's coefficient} (binary classification correlation coefficient).
+After having run the experiments, we measure the results using different metrics. These metrics depend on the clustering or classification step in the approach. For the clustering step, we use the \textbf{Silhouette Score} to measure the cluster relation to our data. For the classification step, we use 6 different metrics \cite{scikit-learn}, namely the \textbf{accuracy} (percentage of samples correctly classified), the \textbf{balanced accuracy} (accuracy taking class balance into account), the \textbf{adjusted balanced accuracy} (balanced accuracy accounting for chance in classification), the \textbf{F1 score} (harmonic mean of the precision and recall), the \textbf{weighted F1 score} (F1 score weighted by class support) and \textbf{Matthew's coefficient} (binary classification correlation coefficient).
 
 \subsubsection{A1}
 
-The silhouette scores linked to the clustering results feature a clear downward trend. Indeed, the maximum score of \textbf{0.66} is reached for \textbf{2} clusters. It then drops down to 0.53 at 3 clusters and keeps decreasing. The two groups feature \textbf{2'132} and \textbf{344} samples respectively, denoting an important size imbalance. Therefore, we ask ourselves if the clustering is relevant and proceed to the classification with both clustered and non-clustered experiments.
+The silhouette scores linked to the clustering results features a clear downward trend (see Figure \ref{fig:A1_clustering_silhouette}). Indeed, the maximum score of \textbf{0.66} is reached for \textbf{2} clusters. It then drops down to 0.53 at 3 clusters and keeps decreasing. The two groups feature \textbf{2'132} and \textbf{344} samples respectively, denoting an important size imbalance. Therefore, we ask ourselves if the clustering is relevant and proceed to the classification with both clustered and non-clustered experiments.
 
-Let us start by comparing the classification methods in the global (no clustering) setup. For \texttt{TimeSeriesSVC}, we can see that all scores increase significantly up to \textbf{828} samples. For the accuracy and F1-score, we reach a maximum of \textbf{79.9\%} accuracy for 828 samples (79.6\% for 1101 samples) and \textbf{86.8\%} F1-score for 1101 samples (86.6\% for 828 samples). Finally, we see a maximum correlation of \textbf{+0.469} (Matthew’s coefficient) at 828 samples.
-For \texttt{KNeighboursTimeSeriesClassifier}, the accuracy seems to oscillate between \textbf{43\%} and \textbf{44.6\%}, and F1-score oscillates between \textbf{45.1\%} and \textbf{47.2\%}. Both scores are below 50\% and no clear trend can be observed in any of the metrics. Finally the maximum correlation coefficient is \textbf{+0.088} which is obtained with 10 samples.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.4\textwidth]{reports/figures/A1_clustering_kmeans.png}
+    \caption{Silhouette score evolution with the number of clusters in A1 (time agnostic clustering).}
+    \label{fig:A1_clustering_silhouette}
+\end{figure}
+
+Let us start by comparing the classification methods in the global (no clustering) setup. For \texttt{TimeSeriesSVC}, we can see that all scores increase significantly up to \textbf{828} samples (see figure \ref{fig:A1_classification_svc_noscluter}). For the accuracy and F1-score, we reach a maximum of \textbf{79.9\%} accuracy for 828 samples (79.6\% for 1101 samples) and \textbf{86.8\%} F1-score for 1101 samples (86.6\% for 828 samples). Finally, we see a maximum correlation of \textbf{+0.469} (Matthew’s coefficient) at 828 samples.
+For \texttt{KNeighboursTimeSeriesClassifier}, the accuracy seems to oscillate between \textbf{43\%} and \textbf{44.6\%}, and F1-score oscillates between \textbf{45.1\%} and \textbf{47.2\%} (see figure \ref{fig:A1_classification_knn_nocluster}). Both scores are below 50\% and no clear trend can be observed in any of the metrics. Finally the maximum correlation coefficient is \textbf{+0.088} which is obtained with 10 samples.
 
 Then, by looking at the clustered experiments, we can further confirm some insights.
-For \texttt{TimeSeriesSVC}, regardless of the clusters we observe that all scores increase sharply until \textbf{667} samples training-set-size (cluster 0) and \textbf{572} samples (cluster 1). Following this point, the scores seem to decrease slightly for cluster 0 and stay steady for cluster 1. This variation in cluster 0 could be interpreted as overfitting. However the highest accuracy and F1-score are confidently reached for \textbf{886} samples (accuracy: \textbf{79.9\%}; F1-score: \textbf{86.8\%}) for cluster 0 and \textbf{853} samples (accuracy: \textbf{75.6\%}; F1-score: \textbf{84.2\%}) for cluster 1. Confidence comes from the fact that cluster 0 evaluates classifiers trained up to 3’953 samples and cluster 1 up to 1’556 samples, both of which are significantly higher than the number of samples for which we observe the best scores.
-For \texttt{KNeighboursTimeSeriesClassifier}, the results are very different between cluster 0 and cluster 1. Let us note that cluster 0 evaluates results only \textbf{4} times up to 886 samples, whereas cluster 1 has \textbf{29} evaluations up to 994 samples. However the trends are still significantly different. 
+For \texttt{TimeSeriesSVC}, regardless of the clusters we observe that all scores increase sharply until \textbf{667} samples training-set-size (cluster 0) and \textbf{572} samples (cluster 1) (see figures \ref{fig:A1_classification_svc_cluster0} and \ref{fig:A1_classification_svc_cluster1}). Following this point, the scores seem to decrease slightly for cluster 0 and stay steady for cluster 1. This variation in cluster 0 could be interpreted as overfitting. However the highest accuracy and F1-score are confidently reached for \textbf{886} samples (accuracy: \textbf{79.9\%}; F1-score: \textbf{86.8\%}) for cluster 0 and \textbf{853} samples (accuracy: \textbf{75.6\%}; F1-score: \textbf{84.2\%}) for cluster 1. Confidence comes from the fact that cluster 0 evaluates classifiers trained up to 3’953 samples and cluster 1 up to 1’556 samples, both of which are significantly higher than the number of samples for which we observe the best scores.
+For \\ \texttt{KNeighboursTimeSeriesClassifier}, the results are very different between cluster 0 and cluster 1. Let us note that cluster 0 evaluates results only \textbf{4} times up to 886 samples, whereas cluster 1 has \textbf{29} evaluations up to 994 samples. However the trends are still significantly different (see figures \ref{fig:A1_classification_knn_cluster0} and \ref{fig:A1_classification_knn_cluster1}). 
 In cluster 0, the best accuracy and F1-score are reached for \textbf{10} samples with \textbf{50.3\%} accuracy and \textbf{57.4\%} F1-score.
 Cluster 1 has a more consistent behavior, and the best accuracy is reached at \textbf{115} samples with \textbf{61.7\%}. Best F1-score is also reached at \textbf{115} samples with \textbf{73.2\%}. Moreover, adjusted accuracy and correlation oscillate around \textbf{0} with best scores of \textbf{8.3\%} and \textbf{0.099} at \textbf{10} samples. There is no trend for these two metrics as negative values are observed as early as \textbf{200} samples, before going back to positive values at around \textbf{400} samples and then negative again around \textbf{750} samples.
 
+\begin{figure*}[h]
+    \centering
+    \includegraphics[width=\linewidth]{reports/figures/A1_classification_svc_nocluster.png}
+    \caption{Evolution of F1-score and accuracy with the number of samples for the support vector classification in A1 (best performing in approach 1).}
+    \label{fig:A1_classification_svc_noscluter}
+\end{figure*}
+
 \subsubsection{A2}
 
-The clustering for 
+The clustering for the second approach featured mixed silhouette scores depending on the technique. Indeed, the time series KMeans \texttt{TimeSeriesKMeans} clustering reached its highest silhouette score of \textbf{0.987} for the following configuration: \textbf{2} clusters, \textbf{50} iterations max, tolerance of \textbf{1e-05}, \textbf{euclidian} metric, and with \textbf{inertia} (see figure \ref{fig:A2_clustering_german_kmeans}). However, the cluster imbalance is high with cluster 0 having only 2 samples.
+On the other hand, the time series kernel (\texttt{KernelKMeans}) clustering performed poorly. The trend goes downward with the number of clusters starting from the beginning. The highest silhouette score is reached at \textbf{0.137} with the \textbf{sigmoid kernel} function and \textbf{2} clusters (see figure \ref{fig:A2_clustering_math_kernel}). The score goes below 0 as soon as the number of clusters gets higher than 2. Moreover there is no distinguishable difference between the performances of the different kernels.
 
 The best results were obtained by the \textbf{Random Forest classifier} trained in \textbf{Experiment 1}. The values obtained for the different metrics described at the beginning of this section can be seen in Table \ref{tab:rf_1_table_results}, where we obtain \textbf{$97.8\%$ accuracy} and \textbf{$98.5\%$ F1-score} for $962$ samples. However, when we trained the \textbf{Random Forest Classifier} in \textbf{Experiment 2}, we obtain \textbf{$56.1\%$ accuracy} and \textbf{$65.8\%$ F1-score} (results shown in table \ref{tab:rf_2_table_results}). This significantly drop in the accuracy when we performed Experiment 2 may be due to a lack of expressiveness of the features used. The results obtain for the Decision Tree Classifiers trained on Experiments 1 and 2 can be found in Tables \ref{tab:dc_1_table_results} and \ref{tab:dc_2_table_results}.
 
@@ -513,24 +525,6 @@ The best results were obtained by the \textbf{Random Forest classifier} trained 
     $644$ & $0.978$ & $0.982$ & $0.963$ & $0.985$ & $0.978$ & $0.945$\\
     $803$ & $0.984$ & $0.985$ & $0.969$ & $0.989$ & $0.984$ & $0.960$\\
     $962$ & $0.987$ & $0.988$ & $0.976$ & $0.991$ & $0.987$ & $0.967$\\
-    \bottomrule
-    \end{tabular}
-\end{table*}
-
-\begin{table*}[h]
-  \caption{\textbf{Accuracy}, \textbf{balanced accuracy}, \textbf{adjusted balanced accuracy}, \textbf{F1 score}, \textbf{weighted F1 score} and \textbf{Matthew's coefficient} for the \emph{Random Forest Classifier} trained in \emph{Experiment 2}.}
-  \label{tab:rf_2_table_results}
-  \begin{tabular}{cllllll}
-    \toprule
-    \textbf{Samples}&\textbf{Accuracy}&\textbf{Balanced Accuracy}&\textbf{Adj. Balanced Accuracy}&\textbf{F1}&\textbf{Weighted F1}&\textbf{Matthew's coeff.}\\
-    \midrule
-    $10$ & $0.592$ & $0.557$ & $0.114$ & $0.695$ & $0.613$ & $0.103$\\
-    $168$ & $0.589$ & $0.568$ & $0.136$ & $0.688$ & $0.612$ & $0.121$\\
-    $327$ & $0.569$ & $0.566$ & $0.132$ & $0.662$ & $0.595$ & $0.117$\\
-    $486$ & $0.583$ & $0.564$ & $0.129$ & $0.681$ & $0.607$ & $0.114$\\
-    $644$ & $0.567$ & $0.560$ & $0.119$ & $0.662$ & $0.592$ & $0.106$\\
-    $803$ & $0.580$ & $0.560$ & $0.120$ & $0.679$ & $0.604$ & $0.107$\\
-    $962$ & $0.561$ & $0.550$ & $0.100$ & $0.658$ & $0.587$ & $0.089$\\
     \bottomrule
     \end{tabular}
 \end{table*}
@@ -553,15 +547,15 @@ Figures \ref{fig:results_rf_1} and \ref{fig:results_rf_2} plot the accuracy and 
 
 \section{Discussion}\label{sec:discussion}
 
-{\color{red}
-\begin{itemize}
-\item Justification: (NICO) Choice to switch the order of clustering and classification going from A1 to A2. 
-    \item Justification: (NICO + MARIA) Failure of clustering
-    \item Justification: (NICO +MARIA) Wild variation in accuracy upon changing elements of the modelling procedure/features
-\end{itemize}
+%{\color{red}
+%\begin{itemize}
+%\item Justification: (NICO) Choice to switch the order of clustering and classification going from A1 to A2. 
+%    \item Justification: (NICO + MARIA) Failure of clustering
+%    \item Justification: (NICO +MARIA) Wild variation in accuracy upon changing elements of the modelling procedure/features
+%\end{itemize}
 
-}
-Let us first further elaborate on the relevance of our two approaches. Switching for each approach the step (clustering or classification) at which we use time series data was an attempt at verifying which type of data was best suited for each specific type of classification i.e. whether time series (resp. time agnostic) data is better leveraged in clustering or in classification. Moreover splitting the approaches in 2 steps allows us to use 2 different kind of data in the same experiment and avoid data leakage as the features are completely different. \textit{Data leakage here refers to the data from the first step biasing the results of the second step}.
+%}
+Let us first further elaborate on the relevance of our two approaches. Moving from A1 to A2 we switched the order of the clustering and classification steps, in which we use time series data was an attempt at verifying which type of data was best suited for each specific type of classification i.e. whether time series (resp. time agnostic) data is better leveraged in clustering or in classification. Moreover splitting the approaches in 2 steps allows us to use 2 different kinds of data in the same experiment and avoid data leakage as the features are completely different. \textit{Data leakage here refers to the data from the first step biasing the results of the second step}.
 
 Another observation is that in both experiments, clustering did not bring much information or precision to the classification step. Indeed, even after hyperparameter fine-tuning, the time series clustering produced an intractable clustering with one cluster having 2 samples only whereas the second cluster holds all the other users. We deduce from it that distance (even with kernel transformations) is not a representative metric to interpret an optimal learning behavior. With respect to the classification results, we conclude that the separation in various dimensions is a more adapted way to catch the underlying patterns in the data.
 
@@ -577,8 +571,8 @@ These results, however, highlight one key difficulty with our approach. Extracti
 
 \section{Conclusion and Future Works}\label{sec:conclusion}
 
-{\color{red} To conclude ... summarise work}.
-As a conclusion, this report details how we looked into student's behavior to improve the examinations results. It details the dataset and the processing work done to select features and samples to be used in our proposed approaches. Two approaches are then detailed to attempt to answer the research question. The first one features a clustering followed by a time series classification, whereas the second one starts with a time series clustering and follows with a time agnostic classification. Within each approach, we run various experiments, in order to fine tune our results and select the best models and methods. Very interestingly, we get promising results for our first approach with the best accuracy going up to 79.9\% with a non-clustered support vector classification over the designated set of features. More suprisingly, we reach a 97.8\% accuracy for the second approach, leading us to investigate our work. 
+%{\color{red} To conclude ... summarise work}.
+To conclude, this report details how we looked into student's behavior to improve the examinations results. It details the dataset and the processing work done to select features and samples to be used in our proposed approaches. Two approaches are then detailed to attempt to answer the research question. The first one features a clustering followed by a time series classification, whereas the second one starts with a time series clustering and follows with a time agnostic classification. Within each approach, we run various experiments, in order to fine tune our results and select the best models and methods. Very interestingly, we get promising results for our first approach with the best accuracy going up to 79.9\% with a non-clustered support vector classification over the designated set of features. More suprisingly, we reach a 97.8\% accuracy for the second approach, leading us to investigate our work. 
 
 Put altogether, this project helped us assess the potential of machine learning methods to leverage real-life data and gain insights from production data. We built a full data processing pipeline and could try different methods to explore, process, transform and learn from it. The discussions in section \ref{sec:discussion} elaborate on our thoughts regarding the employed methods, their constraints and their limitations. However, we believe that our work paves the way for further in-depth research into Lernnavi's data and online learning platform insights in general. 
 
@@ -604,9 +598,12 @@ To Paola, for the sustained interest and really fruitful and engaging topical di
 
 %%
 %% If your work has an appendix, this is the place to put it.
-\appendix
 
-\section{Tables}
+\np 
+\appendix
+\onecolumn
+\section{Appendix}
+\subsection{Further Tables and Figures}
 
 \begin{table*}[h]
   \caption{Feature description of the $\texttt{learn\_sessions\_transactions}$ dataset.}
@@ -662,6 +659,7 @@ To Paola, for the sustained interest and really fruitful and engaging topical di
     \end{tabular}
 \end{table*}
 
+
 \begin{table*}[h]
   \caption{Feature description of the $\texttt{transactions}$ dataset. The features $\texttt{document\_id}$ and $\texttt{document\_version}$ can be used to merge with the $\texttt{document}$ table}
   \label{tab:transactions}
@@ -681,7 +679,261 @@ To Paola, for the sustained interest and really fruitful and engaging topical di
     $\texttt{user\_agent}$ & the browser that the user used \\
     $\texttt{validation}$ & used to validate the format of the input \\
     $\texttt{solution}$ & solution to question \\
-    $\texttt{type}$ type of question \\
+    $\texttt{type}$ & type of question \\
+    \bottomrule
+    \end{tabular}
+\end{table*}
+
+\begin{table*}[h]
+  \caption{Table of metrics for the non-clustered support vector classification in approach 1.}
+  \label{tab:A1_classification_svc_nocluster}
+  \begin{tabular}{cllllll}
+    \toprule
+    Number of samples & accuracy & balancedaccuracy & adjusted balanced accuracy & f1 & f1 weighted & matthews\\
+    \midrule
+       10 & 0.287 & 0.500 & 0.000 & 0.000 & 0.128 & 0.000\\
+      282 & 0.688 & 0.621 & 0.242 & 0.781 & 0.689 & 0.241\\
+      555 & 0.683 & 0.620 & 0.240 & 0.776 & 0.685 & 0.237\\
+      828 & 0.799 & 0.702 & 0.403 & 0.868 & 0.784 & 0.469\\
+     1101 & 0.796 & 0.700 & 0.400 & 0.866 & 0.782 & 0.462\\
+    \bottomrule
+    \end{tabular}
+\end{table*}
+
+\begin{figure*}[h]
+    \centering
+    \includegraphics[width=\linewidth]{reports/figures/A1_classification_knn_nocluster.png}
+    \caption{Evolution of F1 score and accuracy for the non-clustered KNN classification in approach 1.}
+    \label{fig:A1_classification_knn_nocluster}
+\end{figure*}
+
+\begin{table*}[h]
+  \caption{Table of metrics for the non-clustered KNN classification in approach 1.}
+  \label{tab:A1_classification_knn_nocluster}
+  \begin{tabular}{cllllll}
+    \toprule
+    Number of samples & accuracy & balancedaccuracy & adjusted balanced accuracy & f1 & f1 weighted & matthews\\
+    \midrule
+       10 & 0.403 & 0.539 & 0.078 & 0.345 & 0.376 & 0.088\\
+      282 & 0.446 & 0.519 & 0.039 & 0.472 & 0.457 & 0.037\\
+      555 & 0.430 & 0.506 & 0.012 & 0.451 & 0.438 & 0.011\\
+      828 & 0.434 & 0.514 & 0.029 & 0.451 & 0.441 & 0.028\\
+    \bottomrule
+    \end{tabular}
+\end{table*}
+
+\begin{figure*}[h]
+    \centering
+    \includegraphics[width=\linewidth]{reports/figures/A1_classification_svc_cluster0.png}
+    \caption{Evolution of F1 score and accuracy for the support vector classification in approach 1 (cluster 0).}
+    \label{fig:A1_classification_svc_cluster0}
+\end{figure*}
+
+\begin{table*}[h]
+  \caption{Table of metrics for the support vector classification in approach 1 (cluster 0).}
+  \label{tab:A1_classification_svc_cluster0}
+  \begin{tabular}{cllllll}
+    \toprule
+    Number of samples & accuracy & balancedaccuracy & adjusted balanced accuracy & f1 & f1 weighted & matthews\\
+    \midrule
+          10 & 0.691 & 0.627 & 0.254 & 0.783 & 0.694 & 0.249\\
+      229 & 0.724 & 0.649 & 0.299 & 0.810 & 0.721 & 0.304\\
+      448 & 0.719 & 0.647 & 0.294 & 0.806 & 0.717 & 0.297\\
+      667 & 0.798 & 0.701 & 0.403 & 0.868 & 0.785 & 0.460\\
+      886 & 0.799 & 0.702 & 0.404 & 0.869 & 0.786 & 0.462\\
+     1105 & 0.795 & 0.699 & 0.398 & 0.865 & 0.782 & 0.452\\
+     1324 & 0.791 & 0.697 & 0.393 & 0.863 & 0.779 & 0.444\\
+     1543 & 0.788 & 0.696 & 0.392 & 0.860 & 0.777 & 0.437\\
+     1762 & 0.786 & 0.694 & 0.389 & 0.858 & 0.775 & 0.431\\
+     1981 & 0.781 & 0.691 & 0.382 & 0.854 & 0.770 & 0.420\\
+     2200 & 0.779 & 0.690 & 0.379 & 0.853 & 0.769 & 0.416\\
+     2419 & 0.776 & 0.688 & 0.376 & 0.851 & 0.767 & 0.410\\
+     2638 & 0.776 & 0.687 & 0.375 & 0.851 & 0.766 & 0.409\\
+     2857 & 0.774 & 0.686 & 0.372 & 0.849 & 0.765 & 0.405\\
+     3076 & 0.771 & 0.684 & 0.369 & 0.847 & 0.762 & 0.399\\
+     3295 & 0.772 & 0.684 & 0.368 & 0.848 & 0.763 & 0.400\\
+     3514 & 0.772 & 0.684 & 0.368 & 0.848 & 0.763 & 0.400\\
+     3734 & 0.774 & 0.685 & 0.371 & 0.849 & 0.764 & 0.404\\
+     3953 & 0.774 & 0.685 & 0.371 & 0.849 & 0.764 & 0.404\\
+    \bottomrule
+    \end{tabular}
+\end{table*}
+
+\begin{figure*}[h]
+    \centering
+    \includegraphics[width=\linewidth]{reports/figures/A1_classification_svc_cluster1.png}
+    \caption{Evolution of F1 score and accuracy for the support vector classification in approach 1 (cluster 1).}
+    \label{fig:A1_classification_svc_cluster1}
+\end{figure*}
+
+\begin{table*}[h]
+  \caption{Table of metrics for the support vector classification in approach 1 (cluster 1).}
+  \label{tab:A1_classification_svc_cluster1}
+  \begin{tabular}{cllllll}
+    \toprule
+    Number of samples & accuracy & balancedaccuracy & adjusted balanced accuracy & f1 & f1 weighted & matthews\\
+    \midrule
+       10 & 0.720 & 0.500 & 0.000 & 0.837 & 0.603 & 0.000\\
+       45 & 0.399 & 0.583 & 0.165 & 0.284 & 0.339 & 0.229\\
+       80 & 0.399 & 0.583 & 0.165 & 0.284 & 0.339 & 0.229\\
+      115 & 0.404 & 0.586 & 0.173 & 0.294 & 0.348 & 0.235\\
+      150 & 0.404 & 0.581 & 0.161 & 0.303 & 0.352 & 0.212\\
+      185 & 0.404 & 0.581 & 0.161 & 0.303 & 0.352 & 0.212\\
+      220 & 0.435 & 0.602 & 0.205 & 0.363 & 0.399 & 0.247\\
+      256 & 0.689 & 0.597 & 0.195 & 0.789 & 0.683 & 0.202\\
+      291 & 0.684 & 0.594 & 0.187 & 0.784 & 0.679 & 0.193\\
+      326 & 0.679 & 0.590 & 0.180 & 0.780 & 0.675 & 0.185\\
+      361 & 0.409 & 0.579 & 0.157 & 0.321 & 0.365 & 0.197\\
+      396 & 0.674 & 0.587 & 0.173 & 0.776 & 0.671 & 0.176\\
+      431 & 0.674 & 0.587 & 0.173 & 0.776 & 0.671 & 0.176\\
+      466 & 0.668 & 0.583 & 0.166 & 0.771 & 0.666 & 0.168\\
+      502 & 0.663 & 0.579 & 0.159 & 0.767 & 0.662 & 0.160\\
+      537 & 0.658 & 0.576 & 0.151 & 0.763 & 0.658 & 0.151\\
+      572 & 0.751 & 0.640 & 0.281 & 0.838 & 0.734 & 0.324\\
+      607 & 0.751 & 0.640 & 0.281 & 0.838 & 0.734 & 0.324\\
+      642 & 0.751 & 0.640 & 0.281 & 0.838 & 0.734 & 0.324\\
+      677 & 0.751 & 0.640 & 0.281 & 0.838 & 0.734 & 0.324\\
+      712 & 0.751 & 0.640 & 0.281 & 0.838 & 0.734 & 0.324\\
+      748 & 0.756 & 0.644 & 0.288 & 0.842 & 0.738 & 0.336\\
+      783 & 0.756 & 0.644 & 0.288 & 0.842 & 0.738 & 0.336\\
+      818 & 0.756 & 0.644 & 0.288 & 0.842 & 0.738 & 0.336\\
+      853 & 0.756 & 0.644 & 0.288 & 0.842 & 0.738 & 0.336\\
+      888 & 0.756 & 0.644 & 0.288 & 0.842 & 0.738 & 0.336\\
+      923 & 0.751 & 0.640 & 0.281 & 0.838 & 0.734 & 0.324\\
+      958 & 0.751 & 0.640 & 0.281 & 0.838 & 0.734 & 0.324\\
+      994 & 0.751 & 0.640 & 0.281 & 0.838 & 0.734 & 0.324\\
+     1029 & 0.751 & 0.640 & 0.281 & 0.838 & 0.734 & 0.324\\
+     1064 & 0.751 & 0.640 & 0.281 & 0.838 & 0.734 & 0.324\\
+     1099 & 0.751 & 0.640 & 0.281 & 0.838 & 0.734 & 0.324\\
+     1134 & 0.751 & 0.640 & 0.281 & 0.838 & 0.734 & 0.324\\
+     1169 & 0.751 & 0.640 & 0.281 & 0.838 & 0.734 & 0.324\\
+     1204 & 0.746 & 0.637 & 0.274 & 0.834 & 0.730 & 0.312\\
+     1240 & 0.741 & 0.633 & 0.267 & 0.830 & 0.725 & 0.301\\
+     1275 & 0.741 & 0.633 & 0.267 & 0.830 & 0.725 & 0.301\\
+     1310 & 0.741 & 0.633 & 0.267 & 0.830 & 0.725 & 0.301\\
+     1345 & 0.741 & 0.633 & 0.267 & 0.830 & 0.725 & 0.301\\
+     1380 & 0.746 & 0.637 & 0.274 & 0.834 & 0.730 & 0.312\\
+     1415 & 0.746 & 0.637 & 0.274 & 0.834 & 0.730 & 0.312\\
+     1450 & 0.746 & 0.637 & 0.274 & 0.834 & 0.730 & 0.312\\
+     1486 & 0.746 & 0.637 & 0.274 & 0.834 & 0.730 & 0.312\\
+     1521 & 0.746 & 0.637 & 0.274 & 0.834 & 0.730 & 0.312\\
+     1556 & 0.746 & 0.637 & 0.274 & 0.834 & 0.730 & 0.312\\
+    \bottomrule
+    \end{tabular}
+\end{table*}
+
+\begin{figure*}[h]
+    \centering
+    \includegraphics[width=\linewidth]{reports/figures/A1_classification_knn_cluster0.png}
+    \caption{Evolution of F1 score and accuracy for the KNN classification in approach 1 (cluster 0).}
+    \label{fig:A1_classification_knn_cluster0}
+\end{figure*}
+
+\begin{table*}[h]
+  \caption{Table of metrics for the KNN classification in approach 1 (cluster 0).}
+  \label{tab:A1_classification_knn_cluster0}
+  \begin{tabular}{cllllll}
+    \toprule
+    Number of samples & accuracy & balancedaccuracy & adjusted balanced accuracy & f1 & f1 weighted & matthews\\
+    \midrule
+       10 & 0.503 & 0.534 & 0.067 & 0.574 & 0.526 & 0.061\\
+      229 & 0.414 & 0.518 & 0.036 & 0.408 & 0.411 & 0.036\\
+      448 & 0.419 & 0.520 & 0.039 & 0.418 & 0.418 & 0.039\\
+      667 & 0.430 & 0.517 & 0.034 & 0.447 & 0.438 & 0.033\\
+      886 & 0.454 & 0.542 & 0.084 & 0.473 & 0.462 & 0.081\\
+    \bottomrule
+    \end{tabular}
+\end{table*}
+
+\begin{figure*}[h]
+    \centering
+    \includegraphics[width=\linewidth]{reports/figures/A1_classification_knn_cluster1.png}
+    \caption{Evolution of F1 score and accuracy for the KNN classification in approach 1 (cluster 1).}
+    \label{fig:A1_classification_knn_cluster1}
+\end{figure*}
+
+\begin{table*}[h]
+  \caption{Table of metrics for the KNN classification in approach 1 (cluster 1).}
+  \label{tab:A1_classification_knn_cluster1}
+  \begin{tabular}{cllllll}
+    \toprule
+    Number of samples & accuracy & balancedaccuracy & adjusted balanced accuracy & f1 & f1 weighted & matthews\\
+    \midrule
+        10 & 0.389 & 0.542 & 0.083 & 0.314 & 0.352 & 0.099\\
+       45 & 0.596 & 0.516 & 0.031 & 0.713 & 0.602 & 0.030\\
+       80 & 0.596 & 0.510 & 0.020 & 0.715 & 0.600 & 0.019\\
+      115 & 0.617 & 0.530 & 0.060 & 0.732 & 0.619 & 0.059\\
+      150 & 0.549 & 0.495 &-0.011 & 0.664 & 0.566 &-0.010\\
+      185 & 0.544 & 0.491 &-0.018 & 0.659 & 0.562 &-0.017\\
+      220 & 0.575 & 0.496 &-0.009 & 0.696 & 0.583 &-0.009\\
+      256 & 0.554 & 0.475 &-0.049 & 0.679 & 0.565 &-0.047\\
+      291 & 0.580 & 0.499 &-0.002 & 0.701 & 0.588 &-0.002\\
+      326 & 0.580 & 0.499 &-0.002 & 0.701 & 0.588 &-0.002\\
+      361 & 0.601 & 0.519 & 0.038 & 0.718 & 0.606 & 0.037\\
+      396 & 0.606 & 0.523 & 0.046 & 0.723 & 0.610 & 0.045\\
+      431 & 0.596 & 0.510 & 0.020 & 0.715 & 0.600 & 0.019\\
+      466 & 0.606 & 0.523 & 0.046 & 0.723 & 0.610 & 0.045\\
+      502 & 0.591 & 0.512 & 0.024 & 0.708 & 0.598 & 0.023\\
+      537 & 0.580 & 0.505 & 0.010 & 0.699 & 0.589 & 0.009\\
+      572 & 0.591 & 0.512 & 0.024 & 0.708 & 0.598 & 0.023\\
+      607 & 0.591 & 0.512 & 0.024 & 0.708 & 0.598 & 0.023\\
+      642 & 0.585 & 0.508 & 0.017 & 0.704 & 0.594 & 0.016\\
+      677 & 0.585 & 0.508 & 0.017 & 0.704 & 0.594 & 0.016\\
+      712 & 0.575 & 0.490 &-0.020 & 0.699 & 0.582 &-0.020\\
+      748 & 0.570 & 0.486 &-0.027 & 0.694 & 0.577 &-0.026\\
+      783 & 0.570 & 0.486 &-0.027 & 0.694 & 0.577 &-0.026\\
+      818 & 0.570 & 0.486 &-0.027 & 0.694 & 0.577 &-0.026\\
+      853 & 0.554 & 0.470 &-0.060 & 0.681 & 0.563 &-0.058\\
+      888 & 0.570 & 0.481 &-0.039 & 0.696 & 0.576 &-0.038\\
+      923 & 0.554 & 0.464 &-0.072 & 0.684 & 0.561 &-0.070\\
+      958 & 0.560 & 0.473 &-0.053 & 0.686 & 0.567 &-0.051\\
+      994 & 0.560 & 0.473 &-0.053 & 0.686 & 0.567 &-0.051\\
+    \bottomrule
+    \end{tabular}
+\end{table*}
+
+\begin{figure*}[h]
+    \centering
+    \includegraphics[width=\linewidth]{reports/figures/A2_clustering_german_kmeans.png}
+    \caption{Evolution of the silhouette score with the hyperparameter tuning for the time series KMeans clustering in A2. Parameters respectively are number of clusters, max iterations, tolerance, distance metric, inertia. (Please refer to section \ref{sec:results} for explanations on each parameter).}
+    \label{fig:A2_clustering_german_kmeans}
+\end{figure*}
+
+\begin{figure*}[h]
+    \centering
+    \includegraphics[width=\linewidth]{reports/figures/A2_clustering_math_kernel.png}
+    \caption{Evolution of the silhouette score with the hyperparameter tuning for the time series Kernel clustering in A2. Parameters respectively are number of clusters. The different lines indicate the different kernels used for the clustering. (Please refer to section \ref{sec:results} for explanations on each parameter).}
+    \label{fig:A2_clustering_math_kernel}
+\end{figure*}
+
+\begin{table*}[h]
+  \caption{Grid used for finding the best parameter combination for a \emph{Decision Tree Classifier}.}
+  \label{tab:grid_dt}
+  \begin{tabular}{cl}
+    \toprule
+    \textbf{Parameter}&\textbf{Values}\\
+    \midrule
+    $\texttt{min\_samples\_split}$ & $\{2, 5, 10\}$ \\
+    $\texttt{min\_samples\_leaf}$ & $\{1, 2, 4\}$ \\
+    $\texttt{max\_features}$ & $\{\texttt{auto}, \texttt{sqrt}\}$ \\
+    $\texttt{max\_depth}$ & $\{10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, \texttt{None}\}$ \\
+    \bottomrule
+    \end{tabular}
+\end{table*}
+
+\begin{table*}[h]
+  \caption{Grid used for finding the best parameter combination for a \emph{Random Forest Classifier}.}
+  \label{tab:grid_rf}
+  \begin{tabular}{cl}
+    \toprule
+    \textbf{Parameter}&\textbf{Values}\\
+    \midrule
+    $\texttt{n\_estimators}$ & $\{200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000\}$\\
+    $\texttt{min\_samples\_split}$ & $\{2, 5, 10\}$ \\
+    $\texttt{min\_samples\_leaf}$ & $\{1, 2, 4\}$ \\
+    $\texttt{max\_features}$ & $\{\texttt{auto}, \texttt{sqrt}\}$ \\
+    $\texttt{max\_depth}$ & $\{10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, \texttt{None}\}$ \\
+    $\texttt{bootstrap}$ & $\{\texttt{True}, \texttt{False}\}$
     \bottomrule
     \end{tabular}
 \end{table*}
@@ -751,6 +1003,24 @@ To Paola, for the sustained interest and really fruitful and engaging topical di
 \end{table*}
 
 \begin{table*}[h]
+  \caption{\textbf{Accuracy}, \textbf{balanced accuracy}, \textbf{adjusted balanced accuracy}, \textbf{F1 score}, \textbf{weighted F1 score} and \textbf{Matthew's coefficient} for the \emph{Random Forest Classifier} trained in \emph{Experiment 2}.}
+  \label{tab:rf_2_table_results}
+  \begin{tabular}{cllllll}
+    \toprule
+    \textbf{Samples}&\textbf{Accuracy}&\textbf{Balanced Accuracy}&\textbf{Adj. Balanced Accuracy}&\textbf{F1}&\textbf{Weighted F1}&\textbf{Matthew's coeff.}\\
+    \midrule
+    $10$ & $0.592$ & $0.557$ & $0.114$ & $0.695$ & $0.613$ & $0.103$\\
+    $168$ & $0.589$ & $0.568$ & $0.136$ & $0.688$ & $0.612$ & $0.121$\\
+    $327$ & $0.569$ & $0.566$ & $0.132$ & $0.662$ & $0.595$ & $0.117$\\
+    $486$ & $0.583$ & $0.564$ & $0.129$ & $0.681$ & $0.607$ & $0.114$\\
+    $644$ & $0.567$ & $0.560$ & $0.119$ & $0.662$ & $0.592$ & $0.106$\\
+    $803$ & $0.580$ & $0.560$ & $0.120$ & $0.679$ & $0.604$ & $0.107$\\
+    $962$ & $0.561$ & $0.550$ & $0.100$ & $0.658$ & $0.587$ & $0.089$\\
+    \bottomrule
+    \end{tabular}
+\end{table*}
+
+\begin{table*}[h]
   \caption{\textbf{Accuracy}, \textbf{balanced accuracy}, \textbf{adjusted balanced accuracy}, \textbf{F1 score}, \textbf{weighted F1 score} and \textbf{Matthew's coefficient} for the \emph{Decision Tree Classifier} trained in \emph{Experiment 1}.}
   \label{tab:dc_1_table_results}
   \begin{tabular}{cllllll}
@@ -786,7 +1056,7 @@ To Paola, for the sustained interest and really fruitful and engaging topical di
     \end{tabular}
 \end{table*}
 
-\section{Figures}
+
 
 \begin{figure*}[h]
     \centering
@@ -865,11 +1135,9 @@ To Paola, for the sustained interest and really fruitful and engaging topical di
      \label{fig:results_dt_2}
  \end{figure*}
 
-\section{Online Resources}
 
-\begin{itemize}
-    \item Python resources discussion here?
-\end{itemize}
+
+
 
 
 
