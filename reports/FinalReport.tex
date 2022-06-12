@@ -132,7 +132,7 @@
 \author{Mar\'ia Isabel Ruiz Mart\'inez}
 \authornotemark[1]
 \affiliation{%
-  \institution{EPFL, Computer Science (exchange from Universidad de Grenada)}
+  \institution{EPFL, Computer Science (exchange from Universidad de Granada)}
   \city{Lausanne}
   \state{Vaud}
   \country{Switzerland}
@@ -203,91 +203,11 @@ Innately, we are all aware of the fact that self-improvement demands commitment.
 
 The educational platform Lernnavi provided us with a series of datasets reflecting the usage of the platform, among which $\texttt{learn\_sessions\_transactions}$, $\texttt{users}$, $\texttt{events}$ and $\texttt{transactions}$ will be used to carry out our research work.
 
-The $\texttt{learn\_sessions\_transactions}$ dataset contains information about the sessions of the platform. The sessions describe a learn or a level check session started and/or finished by a user and they are sorted chronologically, row by row. Additionally, for each session, there are one or more associated transactions (i.e., answers to tasks in that student's session).
+The $\texttt{learn\_sessions\_transactions}$ dataset ($502'921$ rows) contains information about the sessions of the platform. The sessions describe a learn or a level check session started and/or finished by a user and they are sorted chronologically, row by row. Additionally, for each session, there are one or more associated transactions (i.e., answers to tasks in that student's session).
 
-The $\texttt{users}$ dataset contains demographic information of the users of the educational platform. The $\texttt{events}$ dataset describe the events done by the users in the platform. Finally, the $\texttt{transactions}$ dataset reflects the multiple user transactions (e.g., answering a question) for each session.
+The $\texttt{users}$ dataset ($13'790$ rows) contains demographic information of the users of the educational platform. The $\texttt{events}$ dataset ($3'465'559$ rows) describe the events done by the users in the platform. Finally, the $\texttt{transactions}$ dataset ($800'018$ rows) reflects the multiple user transactions (e.g., answering a question) for each session. The detailed feature description of the datasets is shown in the Tables \ref{tab:learn}, \ref{tab:users}, \ref{tab:events} and \ref{tab:transactions}.
 
-The detailed feature description of the datasets is shown in the Tables \ref{tab:learn}, \ref{tab:users}, \ref{tab:events} and \ref{tab:transactions}.
-
-\begin{table*}[!ht]
-  \caption{Feature description of the $\texttt{learn\_sessions\_transactions}$ dataset.}
-  \label{tab:learn}
-  \begin{tabular}{cl}
-    \toprule
-    \textbf{Feature}&\textbf{Description}\\
-    \midrule
-    $\texttt{learn\_session\_id}$ & Unique identifier for each learn session \\
-    $\texttt{transaction\_id}$ & Transaction identifier, used to link with transactions table \\
-    $\texttt{topicId}$ & Identifier of the topic this session was about \\
-    $\texttt{max\_num\_tasks}$ & Maximum number of tasks included in this session (only relevant for the learn session) \\
-    $\texttt{is\_closed}$ & If this session has been finished ($1$: finished; $0$: not finished) \\
-    $\texttt{type\_id}$ & If this session is a learn or level check ($1$: learn; $2$: level check) \\
-    $\texttt{is\_accepted}$ & If the user finally accepted the result of this session ($1$: accpeted; $0$: refused). \\
-    \bottomrule
-    \end{tabular}
-\end{table*}
-
-\begin{table*}[!ht]
-  \caption{Feature description of the $\texttt{users}$ dataset.}
-  \label{tab:users}
-  \begin{tabular}{cl}
-    \toprule
-    \textbf{Feature}&\textbf{Description}\\
-    \midrule
-    $\texttt{user\_id}$ & Personal identifier of user in database \\
-    $\texttt{gender}$ & Only three values: male, female or missing \\
-    $\texttt{canton}$ & Swiss canton \\
-    $\texttt{class\_level}$ & School year in swiss system \\
-    $\texttt{class\_code}$ & Identifier of student's class. There are students that are using the platform as part of their school work \\
-    \bottomrule
-    \end{tabular}
-\end{table*}
-
-\begin{table*}[!ht]
-  \caption{Feature description of the $\texttt{events}$ dataset.}
-  \label{tab:events}
-  \begin{tabular}{cl}
-    \toprule
-    \textbf{Feature}&\textbf{Description}\\
-    \midrule
-    $\texttt{event\_id}$ & Identifier of event in database \\
-    $\texttt{user\_id}$ & User who performed the event \\
-    $\texttt{timestamp}$ & Timestamp of event \\
-    $\texttt{category}$ & Classification of action (task, general, statistics, etc) \\
-    $\texttt{action}$ & Type of action performed \\
-    $\texttt{event\_type}$ & Whether the event required students to view or to click \\
-    $\texttt{transaction\_token}$ & Used to link to $\texttt{transactions}$ table \\
-    $\texttt{session\_id}$ & During which session the event took place \\
-    $\texttt{tracking\_data}$ & Optional content associated to this event (e.g., the new points mastered for a topic) \\
-    \bottomrule
-    \end{tabular}
-\end{table*}
-
-\begin{table*}[!ht]
-  \caption{Feature description of the $\texttt{transactions}$ dataset. The features $\texttt{document\_id}$ and $\texttt{document\_version}$ can be used to merge with the $\texttt{document}$ table}
-  \label{tab:transactions}
-  \begin{tabular}{cl}
-    \toprule
-    \textbf{Feature}&\textbf{Description}\\
-    \midrule
-    $\texttt{transaction\_id}$ & Unique identifier for each transaction \\
-    $\texttt{transaction\_token}$ & Used to join with events table \\
-    $\texttt{user\_id}$ & User who performed the transaction \\
-    $\texttt{document\_id}$ & Document that was answered in transaction \\
-    $\texttt{document\_version}$ & Version of document that was answered \\
-    $\texttt{evaluation}$ & Whether the user answered correctly or not. It is possible that it was only partially right \\
-    $\texttt{input}$ & Answer the user gave \\
-    $\texttt{start\_time}$ & Timestamp of when the user started answering \\
-    $\texttt{commit\_time}$ & Timestamp of when the user submitted the answer \\
-    $\texttt{user\_agent}$ & The browser that the user used \\
-    $\texttt{validation}$ & Used to validate the format of the input \\
-    $\texttt{solution}$ & Solution to question \\
-    $\texttt{type}$ Type of question \\
-    \bottomrule
-    \end{tabular}
-\end{table*}
-
-An study on the $\texttt{gender}$, $\texttt{canton}$ and $\texttt{class\_level}$ of the users of the platform was also performed.
+A study on the $\texttt{gender}$, $\texttt{canton}$ and $\texttt{class\_level}$ of the users of the platform was also performed.
 
 We remark that there is a geographical element to the data (shown in Figures \ref{fig:my_label} and \ref{fig:cantonal_representation}), and this is important because it might introduce mixed effects between the groups of students by region. Consequently we investigated to some degree the cantonal representation within the dataset and how activity on the platform varied with location. At this stage it is quite preliminary is essentially an aperçu into what additional features we may need to include in the model for more accurate results (find more details in the associated notebook).
 
@@ -321,7 +241,7 @@ Furthermore, we decide not to disclose based on the gender on the users since th
     \label{fig:pie_chart}
 \end{figure}
 
-\section{Data cleaning} \label{data:cleaning}
+\section{Data Processing} \label{data:cleaning}
 
 {\color{red}
 \begin{itemize}
@@ -332,7 +252,7 @@ Furthermore, we decide not to disclose based on the gender on the users since th
 Our dataset after the cleaning process consists of $790'425$ rows corresponding to actions of users on the platform. For each row, the following features shown in Table \ref{tab:features} are listed as columns.
 
 \begin{table*}[!ht]
-  \caption{Time agnostic, aggregated features used in methodology A2 for a given user $i$ for all data recorded on the platform before level check $t$.}
+  \caption{Features obtain after the cleaning process.}
   \label{tab:features}
   \begin{tabular}{cl}
     \toprule
@@ -390,7 +310,7 @@ Therefore, each \textbf{sample} in our classification training data is constitut
         \label{fig:histograms}
 \end{figure}
 
-By plotting the histograms of some of the numerical features ($\texttt{num\_checks}$, $\texttt{num\_participations}$, \\ $\texttt{num\_actions\_per\_week}$ and $\texttt{num\_weeks\_per\_user}$) (Figure \ref{fig:histograms}), we can clearly see that none of them comes from a normal distribution. Indeed, they are all right skewed, which comes from the fact that only a few students are very active on the platform.
+By plotting the histograms of some of the numerical features ($\texttt{num\_checks}$, $\texttt{num\_participations}$, \\ $\texttt{num\_actions\_per\_week}$ and $\texttt{num\_weeks\_per\_user}$) (Figure \ref{fig:histograms}), we can clearly see that none of them comes from a normal distribution. Indeed, they are all right skewed, which demonstrates that few students have very high action counts on the platform.
 
 In the data processing phase, we first remove users with no transaction data (i.e. we keep users that are both in the events table and in the transactions table). To continue, inactive users will also be removed from our dataset since we consider that they are not using the platform enough to extract any valuable conclusion from them.
 
@@ -548,42 +468,84 @@ For each one of the approaches, we derive a series of experiments. As mentioned 
 {\color{red}NICO (A1), MARIA (A2)}
 \subsection{Experiments}\label{subsec:eval}
 
-For both approaches, we followed the same guidelines regarding clustering followed by classification. For each approach, we detail what experiments were done.\\
+For both approaches, we followed the same guidelines regarding clustering followed by classification. For each approach, we detail what experiments were done.
 
 \subsubsection{A1}
-For the first approach, the clustering was done using the \textbf{K-Means} algorithm. For this experiment, we finetune the number of cluster \texttt{k} in a range $[2, 10]$. Then we use the \textbf{Silhouette Score} in order to see which clustering is most coherent to our data. \textit{Let us recall that the silhouette score evaluates how well distinguishable and identified the clusters are by rating their centers’ individuality and preciseness. It ranges from 1 (perfectly differentiable and identified clusters) to -1 (overlapping clusters with close centers).}
+For the first approach, the clustering was done using the \textbf{K-Means} algorithm. For this experiment, we finetune the number of clusters \texttt{k} $\in \{2,3,\ldots, 10\}$. Then we use the \textbf{Silhouette Score} in order to see which clustering is most coherent to our data. \textit{Let us recall that the silhouette score evaluates how well distinguishable and identified the clusters are by rating their centers’ individuality and preciseness. It ranges from $1$ (perfectly differentiable and identified clusters) to $-1$ (overlapping clusters with close centers).}
 
-The classification is done using 2 different classification techniques applied to time series. Namely, we classify for the clustered and non-clustered setting using the \texttt{TimeSeriesSVC} (support-vector technique) and \\ \texttt{KNeighborsTimeSeriesClassifier} (K-NN classification technique). For the former method, we could not perform experiments by varying the \texttt{kernel} parameter as the \textit{Global Alignment Kernel} \texttt{gak} \textbf{kernel} is the only one working for the time series classification. \textit{The GAK kernel is responsible for aligning the different time series before classification}. For the latter method, we had the possibility to tune the \textbf{number of considered neighbors}. However preliminary results with the default parameter showed that the model performed significantly worse than its support-vector counterpart. Therefore, we did not perform experiments on this dimension of the model. Finally due to the significant amount of time necessary to train the classifier, we chose to perform experiments by varying the \textbf{} used for training in the range $[10, 3953]$. Let us note that the upper bound of this range is not reached for all experiments, however all experiments go up to at least $828$ samples.
+The classification is done using 2 different classification techniques applied to time series. Namely, we classify for the clustered and non-clustered setting using the \texttt{TimeSeriesSVC} (support-vector technique) and \\ \texttt{KNeighborsTimeSeriesClassifier} (K-NN classification technique). For the former method, we could not perform experiments by varying the \texttt{kernel} parameter as the \textit{Global Alignment Kernel} \texttt{gak} \textbf{kernel} is the only one working for the time series classification. \textit{The GAK kernel is responsible for aligning the different time series before classification}. For the latter method, we had the possibility to tune the \textbf{number of considered neighbors}. However preliminary results with the default parameter showed that the model performed significantly worse than its support-vector counterpart. Therefore, we did not perform experiments on this dimension of the model. The default parameter used was \texttt{k=3}. Finally due to the significant amount of time necessary to train the classifier, we chose to perform experiments by varying the \textbf{number of samples} used for training in the range $[10, 3953]$. Let us note that the upper bound of this range is not reached for all experiments, however all experiments go up to at least $828$ samples.
 
 \subsubsection{A2}
 For the \textbf{second approach}, the clustering was done using 2 different time series clustering techniques. The techniques are \texttt{TimeSeriesKMeans} (K-NN based clustering techniques) and \texttt{KernelKMean} (variation of the former applying a kernel function before clustering). For the first technique, we vary the \textbf{number of clusters} in the integer range $[2, 6]$, the \textbf{maximum iterations} performed by the algorithm in the list $[50, 100]$, the tolerance criterion to indicate convergence in the list $[1e-5, 1e-6, 1e-7]$, the \textbf{distance metric} in the list $[\texttt{euclidean}, \texttt{dtw}]$, and whether the algorithm should use \textbf{inertia} or not.
 
 In the second part, we performed two experiments. In the first experiment, the classification step is carried out with all the behavioral features shown in Table \ref{tab:A2features}, whereas in the second experiment we left out the feature $\texttt{num\_weeks\_on}$.
 
-Both a Decision Tree Classifier and a Random Forest Classifier were trained on the whole dataset since the clustering was not relevant. Hyperparameter tunning was performed to determine the best parameters of each of the models.
+Both a Decision Tree Classifier and a Random Forest Classifier were trained on the whole dataset since the clustering was not relevant. Hyperparameter tunning was performed using \textbf{Randomized Search} to determine the best parameters of each of the models.
 
-%% Detail the parameters tuned for each of the models
-%% Detail a little bit more how the hyperparameter tunning was done.
+The parameters tuned for each of the models in both of the experiments with their respective best combinations can be found in the Tables \ref{tab:dc_1}, \ref{tab:dc_2}, \ref{tab:rf_1} and \ref{tab:rf_2}.
 
 The Figures \ref{fig:hyp_decision_1} and \ref{fig:hyp_decision_2} show accuracy results for several trainings done with different combinations of the parameters of the Decision Tree Classifier for the first and the second experiment respectively. Equivalently, the Figures \ref{fig:hyp_forest_1} and \ref{fig:hyp_forest_2} show accuracy results for several trainings done with different combinations of the parameters of the Random Forest Classifier for the first and the second experiment respectively.
 
-\begin{figure}
-    \centering
-    \includegraphics[width=\linewidth]{reports/figures/PWHex.jpg}
-    \caption{.}
-    \label{fig:PWHex}
-\end{figure}
+The feature importance of each of the classifiers in both experiments is shown in Figures \ref{fig:fi_dc_1},
+\ref{fig:fi_dc_2}, \ref{fig:fi_rf_1} and \ref{fig:fi_rf_2}. As we can see, the most important feature in Experiment 1 is $\texttt{num\_weeks\_on}$ whereas in Experiment 2 is $\texttt{num\_actions\_per\_week}$.
 
-\subsection{Evaluation Results}\label{subsec:eval_results}
+\subsection{Evaluation}\label{subsec:eval_results}
 
-After having run the experiments, we measure the results using different metrics. These metrics depend on the clustering or classification step in the approach. For the clustering step, we use the \textbf{Silhouette Score} to measure the cluster relation to our data. For the classification step, we use 6 different metrics, namely the \textbf{accuracy} (percentage of samples correctly classified), the \textbf{balanced accuracy} (accuracy taking class balance into account), the \textbf{adjusted balanced accuracy} (balanced accuracy accounting for chance in classification), the \textbf{F1 score} (harmonic mean of the precision and recall), the \textbf{weighted F1 score} (F1 score weighted by class support) and \textbf{Matthew's coefficient} (binary classification)
+After having run the experiments, we measure the results using different metrics. These metrics depend on the clustering or classification step in the approach. For the clustering step, we use the \textbf{Silhouette Score} to measure the cluster relation to our data. For the classification step, we use 6 different metrics\cite{scikit-learn}, namely the \textbf{accuracy} (percentage of samples correctly classified), the \textbf{balanced accuracy} (accuracy taking class balance into account), the \textbf{adjusted balanced accuracy} (balanced accuracy accounting for chance in classification), the \textbf{F1 score} (harmonic mean of the precision and recall), the \textbf{weighted F1 score} (F1 score weighted by class support) and \textbf{Matthew's coefficient} (binary classification correlation coefficient).
 
 \subsubsection{A1}
 
 
 
+
 \subsubsection{A2}
 
+The best results were obtained by the \textbf{Random Forest classifier} trained in \textbf{Experiment 1}. The values obtained for the different metrics described at the beginning of this section can be seen in Table \ref{tab:rf_1_table_results}, where we obtain \textbf{$97.8\%$ accuracy} and \textbf{$98.5\%$ F1-score} for $962$ samples. However, when we trained the \textbf{Random Forest Classifier} in \textbf{Experiment 2}, we obtain \textbf{$56.1\%$ accuracy} and \textbf{$65.8\%$ F1-score} (results shown in table \ref{tab:rf_2_table_results}). This significantly drop in the accuracy when we performed Experiment 2 may be due to a lack of expressiveness of the features used. The results obtain for the Decision Tree Classifiers trained on Experiments 1 and 2 can be found in Tables \ref{tab:dc_1_table_results} and \ref{tab:dc_2_table_results}.
+
+\begin{table*}[h]
+  \caption{\textbf{Accuracy}, \textbf{balanced accuracy}, \textbf{adjusted balanced accuracy}, \textbf{F1 score}, \textbf{weighted F1 score} and \textbf{Matthew's coefficient} for the \emph{Random Forest Classifier} trained in \emph{Experiment 1}.}
+  \label{tab:rf_1_table_results}
+  \begin{tabular}{cllllll}
+    \toprule
+    \textbf{Samples}&\textbf{Accuracy}&\textbf{Balanced Accuracy}&\textbf{Adj. Balanced Accuracy}&\textbf{F1}&\textbf{Weighted F1}&\textbf{Matthew's coeff.}\\
+    \midrule
+    $10$ & $0.888$ & $0.917$ & $0.834$ & $0.918$ & $0.893$ & $0.763$\\
+    $168$ & $0.903$ & $0.930$ & $0.860$ & $0.930$ & $0.907$ & $0.792$\\
+    $327$ & $0.913$ & $0.941$ & $0.881$ & $0.938$ & $0.917$ & $0.814$\\
+    $486$ & $0.975$ & $0.981$ & $0.963$ & $0.983$ & $0.975$ & $0.939$\\
+    $644$ & $0.978$ & $0.982$ & $0.963$ & $0.985$ & $0.978$ & $0.945$\\
+    $803$ & $0.984$ & $0.985$ & $0.969$ & $0.989$ & $0.984$ & $0.960$\\
+    $962$ & $0.987$ & $0.988$ & $0.976$ & $0.991$ & $0.987$ & $0.967$\\
+    \bottomrule
+    \end{tabular}
+\end{table*}
+
+\begin{table*}[h]
+  \caption{\textbf{Accuracy}, \textbf{balanced accuracy}, \textbf{adjusted balanced accuracy}, \textbf{F1 score}, \textbf{weighted F1 score} and \textbf{Matthew's coefficient} for the \emph{Random Forest Classifier} trained in \emph{Experiment 2}.}
+  \label{tab:rf_2_table_results}
+  \begin{tabular}{cllllll}
+    \toprule
+    \textbf{Samples}&\textbf{Accuracy}&\textbf{Balanced Accuracy}&\textbf{Adj. Balanced Accuracy}&\textbf{F1}&\textbf{Weighted F1}&\textbf{Matthew's coeff.}\\
+    \midrule
+    $10$ & $0.592$ & $0.557$ & $0.114$ & $0.695$ & $0.613$ & $0.103$\\
+    $168$ & $0.589$ & $0.568$ & $0.136$ & $0.688$ & $0.612$ & $0.121$\\
+    $327$ & $0.569$ & $0.566$ & $0.132$ & $0.662$ & $0.595$ & $0.117$\\
+    $486$ & $0.583$ & $0.564$ & $0.129$ & $0.681$ & $0.607$ & $0.114$\\
+    $644$ & $0.567$ & $0.560$ & $0.119$ & $0.662$ & $0.592$ & $0.106$\\
+    $803$ & $0.580$ & $0.560$ & $0.120$ & $0.679$ & $0.604$ & $0.107$\\
+    $962$ & $0.561$ & $0.550$ & $0.100$ & $0.658$ & $0.587$ & $0.089$\\
+    \bottomrule
+    \end{tabular}
+\end{table*}
+
+Figures \ref{fig:results_rf_1} and \ref{fig:results_rf_2} plot the accuracy and the F1-score against the number of samples in both experiments for the Random Forest model. Analogous graphs are shown in Figures \ref{fig:results_dt_1} and \ref{fig:results_dt_2}.
+
+ \begin{figure*}[h]
+     \centering
+     \includegraphics[width=0.5\linewidth]{reports/figures/feature_importance_dc_1.jpg}
+     \caption{Bar chart of the \emph{feature importance} of the \emph{Decision Tree Classifier} trained in \emph{Experiment 1}.}
+     \label{fig:fi_dc_1}
+ \end{figure*}
 
 \section{Discussion}\label{sec:discussion}
 
@@ -595,6 +557,7 @@ After having run the experiments, we measure the results using different metrics
 \end{itemize}
 
 }
+Let us first further elaborate on the relevance of our two approaches. Switching the step of the approach (clustering or classification) at which we use time series data was an attempt at verifying which type of data was best suited for each specific type of classification i.e. whether time series (resp. time agnostic) data is better leveraged in clustering or in classification. Moreover splitting the approaches in 2 steps 
 
 Our results demonstrate that differing patterns of student behaviours certainly influence their performance on the platform. We could not identify a specific optimal behavior, and our highest prediction accuracy confirmed the `common sense' answer to our question: the more time you spend on the platform, the better you will tend to achieve. Succinctly, consistency begets attainment. 
 
@@ -607,6 +570,9 @@ These results, however, highlight one key difficulty with our approach. Extracti
 \section{Conclusion and Future Works}\label{sec:conclusion}
 
 {\color{red} To conclude ... summarise work}.
+As a conclusion, this report details how we looked into student's behavior to improve the examinations results. It details the dataset and the processing work done to select features and samples to be used in our proposed approaches. Two approaches are then detailed to attempt to answer the research question. The first one features a clustering followed by a time series classification, whereas the second one starts with a time series clustering and follows with a time agnostic classification. Within each approach, we run various experiments, in order to fine tune our results and select the best models and methods. Very interestingly, we get promising results for our first approach with the best accuracy going up to 79.9\% with a non-clustered support vector classification over the designated set of features. More suprisingly, we reach a 97.8\% accuracy for the second approach, leading us to investigate our work. 
+
+Put altogether, this project helped us assess the potential of machine learning methods to leverage real-life data and gain insights from production data. We built a full data processing pipeline and could try different methods to explore, process, transform and learn from it. The discussions in section \ref{sec:discussion} elaborate on our thoughts regarding the employed methods, their constraints and their limitations. However, we believe that our work paves the way for further in-depth research into Lernnavi's data and online learning platform insights in general. 
 
 In future work, we suggest that the results of our work be used to inform an experiment in which the inverse approach is taken. That is, informed by data and neuroscientific and psychological literature, conduct a (conditionally) randomised experiment in which students are exposed to -- or, forced to exhibit -- a particular behaviour or structure, and appeal to the field of causal inference in order to determine any effect on attainment, by comparing and contrasting enforced behavioural patterns. For example, students might be use the platform solely as a homework device, or it might be used in conjunction with classroom learning. In this way, educators can begin to narrow the scope on what behavioural patterns lead to success, which could work in tandem with the development of machine learning models, in order to refine the patterns for which they search. 
 
@@ -631,6 +597,244 @@ To Paola, for the sustained interest and really fruitful and engaging topical di
 %%
 %% If your work has an appendix, this is the place to put it.
 \appendix
+
+\section{Tables}
+
+\begin{table*}[h]
+  \caption{Feature description of the $\texttt{learn\_sessions\_transactions}$ dataset.}
+  \label{tab:learn}
+  \begin{tabular}{cl}
+    \toprule
+    \textbf{Feature}&\textbf{Description}\\
+    \midrule
+    $\texttt{learn\_session\_id}$ & unique identifier for each learn session \\
+    $\texttt{transaction\_id}$ & transaction identifier, used to link with transactions table \\
+    $\texttt{topicId}$ & identifier of the topic this session was about \\
+    $\texttt{max\_num\_tasks}$ & maximum number of tasks included in this session (only relevant for the learn session) \\
+    $\texttt{is\_closed}$ & if this session has been finished ($1$: finished; $0$: not finished) \\
+    $\texttt{type\_id}$ & if this session is a learn or level check ($1$: learn; $2$: level check) \\
+    $\texttt{is\_accepted}$ & if the user finally accepted the result of this session ($1$: accpeted; $0$: refused). \\
+    \bottomrule
+    \end{tabular}
+\end{table*}
+
+\begin{table*}[h]
+  \caption{Feature description of the $\texttt{users}$ dataset.}
+  \label{tab:users}
+  \begin{tabular}{cl}
+    \toprule
+    \textbf{Feature}&\textbf{Description}\\
+    \midrule
+    $\texttt{user\_id}$ & personal identifier of user in database \\
+    $\texttt{gender}$ & only three values: male, female or missing \\
+    $\texttt{canton}$ & swiss canton \\
+    $\texttt{class\_level}$ & school year in swiss system \\
+    $\texttt{class\_code}$ & identifier of student's class. There are students that are using the platform as part of their school work \\
+    \bottomrule
+    \end{tabular}
+\end{table*}
+
+\begin{table*}[h]
+  \caption{Feature description of the $\texttt{events}$ dataset.}
+  \label{tab:events}
+  \begin{tabular}{cl}
+    \toprule
+    \textbf{Feature}&\textbf{Description}\\
+    \midrule
+    $\texttt{event\_id}$ & identifier of event in database \\
+    $\texttt{user\_id}$ & user who performed the event \\
+    $\texttt{timestamp}$ & timestamp of event \\
+    $\texttt{category}$ & classification of action (task, general, statistics, etc) \\
+    $\texttt{action}$ & type of action performed \\
+    $\texttt{event\_type}$ & whether the event required students to view or to click \\
+    $\texttt{transaction\_token}$ & used to link to $\texttt{transactions}$ table \\
+    $\texttt{session\_id}$ & during which session the event took place \\
+    $\texttt{tracking\_data}$ & optional content associated to this event (e.g., the new points mastered for a topic) \\
+    \bottomrule
+    \end{tabular}
+\end{table*}
+
+\begin{table*}[h]
+  \caption{Feature description of the $\texttt{transactions}$ dataset. The features $\texttt{document\_id}$ and $\texttt{document\_version}$ can be used to merge with the $\texttt{document}$ table}
+  \label{tab:transactions}
+  \begin{tabular}{cl}
+    \toprule
+    \textbf{Feature}&\textbf{Description}\\
+    \midrule
+    $\texttt{transaction\_id}$ & unique identifier for each transaction \\
+    $\texttt{transaction\_token}$ & used to join with events table \\
+    $\texttt{user\_id}$ & user who performed the transaction \\
+    $\texttt{document\_id}$ & document that was answered in transaction \\
+    $\texttt{document\_version}$ & version of document that was answered \\
+    $\texttt{evaluation}$ & whether the user answered correctly or not. It is possible that it was only partially right \\
+    $\texttt{input}$ & answer the user gave \\
+    $\texttt{start\_time}$ & timestamp of when the user started answering \\
+    $\texttt{commit\_time}$ & timestamp of when the user submitted the answer \\
+    $\texttt{user\_agent}$ & the browser that the user used \\
+    $\texttt{validation}$ & used to validate the format of the input \\
+    $\texttt{solution}$ & solution to question \\
+    $\texttt{type}$ type of question \\
+    \bottomrule
+    \end{tabular}
+\end{table*}
+
+\begin{table*}[h]
+  \caption{Best parameters combination for a \emph{Decision Tree Classifier} in \emph{Experiment 1}.}
+  \label{tab:dc_1}
+  \begin{tabular}{cl}
+    \toprule
+    \textbf{Parameter}&\textbf{Value}\\
+    \midrule
+    $\texttt{min\_samples\_split}$ & $5$ \\
+    $\texttt{min\_samples\_leaf}$ & $1$ \\
+    $\texttt{max\_features}$ & $\texttt{auto}$ \\
+    $\texttt{max\_depth}$ & $40$ \\
+    \bottomrule
+    \end{tabular}
+\end{table*}
+
+\begin{table*}[h]
+  \caption{Best parameters combination for a \emph{Decision Tree Classifier} in \emph{Experiment 2}.}
+  \label{tab:dc_2}
+  \begin{tabular}{cl}
+    \toprule
+    \textbf{Parameter}&\textbf{Value}\\
+    \midrule
+    $\texttt{min\_samples\_split}$ & $2$ \\
+    $\texttt{min\_samples\_leaf}$ & $1$ \\
+    $\texttt{max\_features}$ & $\texttt{sqrt}$ \\
+    $\texttt{max\_depth}$ & $80$ \\
+    \bottomrule
+    \end{tabular}
+\end{table*}
+
+\begin{table*}[h]
+  \caption{Best parameters combination for a \emph{Random Forest Classifier} in \emph{Experiment 1}.}
+  \label{tab:rf_1}
+  \begin{tabular}{cl}
+    \toprule
+    \textbf{Parameter}&\textbf{Value}\\
+    \midrule
+    $\texttt{n\_estimators}$ & $1400$\\
+    $\texttt{min\_samples\_split}$ & $10$ \\
+    $\texttt{min\_samples\_leaf}$ & $1$ \\
+    $\texttt{max\_features}$ & $\texttt{auto}$ \\
+    $\texttt{max\_depth}$ & $110$ \\
+    $\texttt{bootstrap}$ & $\texttt{False}$ \\
+    \bottomrule
+    \end{tabular}
+\end{table*}
+
+\begin{table*}[h]
+  \caption{Best parameters combination for a \emph{Random Forest Classifier} in \emph{Experiment 2}.}
+  \label{tab:rf_2}
+  \begin{tabular}{cl}
+    \toprule
+    \textbf{Parameter}&\textbf{Value}\\
+    \midrule
+    $\texttt{n\_estimators}$ & $400$\\
+    $\texttt{min\_samples\_split}$ & $2$ \\
+    $\texttt{min\_samples\_leaf}$ & $1$ \\
+    $\texttt{max\_features}$ & $\texttt{auto}$ \\
+    $\texttt{max\_depth}$ & $70$ \\
+    $\texttt{bootstrap}$ & $\texttt{False}$ \\
+    \bottomrule
+    \end{tabular}
+\end{table*}
+
+\begin{table*}[h]
+  \caption{\textbf{Accuracy}, \textbf{balanced accuracy}, \textbf{adjusted balanced accuracy}, \textbf{F1 score}, \textbf{weighted F1 score} and \textbf{Matthew's coefficient} for the \emph{Decision Tree Classifier} trained in \emph{Experiment 1}.}
+  \label{tab:dc_1_table_results}
+  \begin{tabular}{cllllll}
+    \toprule
+    \textbf{Samples}&\textbf{Accuracy}&\textbf{Balanced Accuracy}&\textbf{Adj. Balanced Accuracy}&\textbf{F1}&\textbf{Weighted F1}&\textbf{Matthew's coeff.}\\
+    \midrule
+    $10$ & $0.540$ & $0.544$ & $0.089$ & $0.632$ & $0.567$ & $0.078$\\
+    $168$ & $0.880$ & $0.895$ & $0.789$ & $0.914$ & $0.885$ & $0.732$\\
+    $327$ & $0.965$ & $0.969$ & $0.939$ & $0.976$ & $0.966$ & $0.914$\\
+    $486$ & $0.875$ & $0.880$ & $0.759$ & $0.911$ & $0.879$ & $0.710$\\
+    $644$ & $0.999$ & $0.999$ & $0.999$ & $0.999$ & $0.999$ & $0.998$\\
+    $803$ & $0.960$ & $0.959$ & $0.918$ & $0.972$ & $0.960$ & $0.900$\\
+    $962$ & $1.000$ & $1.000$ & $1.000$ & $1.000$ & $1.000$ & $1.000$\\
+    \bottomrule
+    \end{tabular}
+\end{table*}
+
+\begin{table*}[h]
+  \caption{\textbf{Accuracy}, \textbf{balanced accuracy}, \textbf{adjusted balanced accuracy}, \textbf{F1 score}, \textbf{weighted F1 score} and \textbf{Matthew's coefficient} for the \emph{Decision Tree Classifier} trained in \emph{Experiment 2}.}
+  \label{tab:dc_2_table_results}
+  \begin{tabular}{cllllll}
+    \toprule
+    \textbf{Samples}&\textbf{Accuracy}&\textbf{Balanced Accuracy}&\textbf{Adj. Balanced Accuracy}&\textbf{F1}&\textbf{Weighted F1}&\textbf{Matthew's coeff.}\\
+    \midrule
+    $10$ & $0.560$ & $0.545$ & $0.089$ & $0.660$ & $0.586$ & $0.079$\\
+    $168$ & $0.573$ & $0.558$ & $0.116$ & $0.671$ & $0.598$ & $0.103$\\
+    $327$ & $0.569$ & $0.557$ & $0.113$ & $0.666$ & $0.594$ & $0.100$\\
+    $486$ & $0.562$ & $0.545$ & $0.091$ & $0.661$ & $0.587$ & $0.080$\\
+    $644$ & $0.553$ & $0.543$ & $0.086$ & $0.650$ & $0.579$ & $0.076$\\
+    $803$ & $0.572$ & $0.559$ & $0.119$ & $0.668$ & $0.597$ & $0.105$\\
+    $962$ & $0.550$ & $0.534$ & $0.068$ & $0.651$ & $0.576$ & $0.060$\\
+    \bottomrule
+    \end{tabular}
+\end{table*}
+
+\section{Figures}
+
+\begin{figure*}[h]
+    \centering
+    \includegraphics[width=\linewidth]{reports/figures/decision_tree_1.png}
+    \caption{Hyperparameter tunning of a \emph{Decision Tree Classifier} in Experiment 1.}
+    \label{fig:hyp_decision_1}
+\end{figure*}
+
+\begin{figure*}[h]
+    \centering
+    \includegraphics[width=\linewidth]{reports/figures/decision_tree_2.png}
+    \caption{Hyperparameter tunning of a \emph{Decision Tree Classifier} in Experiment 2.}
+    \label{fig:hyp_decision_2}
+\end{figure*}
+
+\begin{figure*}[h]
+    \centering
+    \includegraphics[width=\linewidth]{reports/figures/random_forest_1.png}
+    \caption{Hyperparameter tunning of a \emph{Random Forest Classifier} in Experiment 1.}
+    \label{fig:hyp_forest_1}
+\end{figure*}
+
+\begin{figure*}[h]
+    \centering
+    \includegraphics[width=\linewidth]{reports/figures/random_forest_2.png}
+    \caption{Hyperparameter tunning of a \emph{Random Forest Classifier} in Experiment 2.}
+    \label{fig:hyp_forest_2}
+\end{figure*}
+
+ \begin{figure*}[h]
+     \centering
+     \includegraphics[width=0.5\linewidth]{reports/figures/feature_importance_dc_1.jpg}
+     \caption{Bar chart of the \emph{feature importance} of the \emph{Decision Tree Classifier} trained in \emph{Experiment 1}.}
+     \label{fig:fi_dc_1}
+ \end{figure*}
+ 
+ \begin{figure*}[h]
+     \centering
+     \includegraphics[width=0.5\linewidth]{reports/figures/feature_importance_dc_2.jpg}
+     \caption{Bar chart of the \emph{feature importance} of the \emph{Decision Tree Classifier} trained in \emph{Experiment 2}.}
+     \label{fig:fi_dc_2}
+ \end{figure*}
+
+ \begin{figure*}[h]
+     \centering
+     \includegraphics[width=0.5\linewidth]{reports/figures/feature_importance_rf_1.jpg}
+     \caption{Bar chart of the \emph{feature importance} of the \emph{Random Forest Classifier} trained in \emph{Experiment 1}.}
+     \label{fig:fi_rf_1}
+ \end{figure*}
+ 
+ \begin{figure*}[h]
+     \centering
+     \includegraphics[width=0.5\linewidth]{reports/figures/feature_importance_rf_2.jpg}
+     \caption{Bar chart of the \emph{feature importance} of the \emph{Random Forest Classifier} trained in \emph{Experiment 2}.}
+     \label{fig:fi_rf_2}
+ \end{figure*}
 
 \section{Online Resources}
 
