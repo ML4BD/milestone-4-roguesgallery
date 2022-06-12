@@ -252,10 +252,26 @@ The information corresponding to the level checks performed by the users of the 
 
 Therefore, each \textbf{sample} in our classification training data is constituted of chosen \textbf{features} and a \textbf{label}. The features (varying depending on the selected approach) are information up to a specific week preceeding the level check week. The label is the result of the aggregated change in mastery score i.e. whether the student mostly improved its level check score or decreased it. \textit{Please refer to the details on each approach to illustrate the features-label in each case.}
 
-\textbf{Include plots missing.}
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{reports/figures/PWHex.jpg}
+    \vspace{-2cm}
+    \begin{subfigure}[h]{0.5\textwidth}
+            \includegraphics[scale=1, natwidth=193px,natheight=197px]{reports/figures/hisprinzipbild.jpg}
+        \caption{Prinzipbild \cite{Tipl}}
+        \label{Prinzipbild}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.5\textwidth}
+        \vspace{2.8cm}
+        \includegraphics[scale=1, natheight=115px,natwidth=263px]{img/realerSensor.jpg}
+            \caption{Schnitt realer Sensor \cite{Pat}}
+        \label{realSensor}
+    \end{subfigure}
+    \caption{Caption.}
+    \label{fig:histograms}
+\end{figure}
 
-
-By plotting the histograms of some of the numerical features (\emph{`num\_checks'}, \emph{`num\_participations'}, \\ \emph{`num\_actions\_per\_week'} and \emph{`num\_weeks\_per\_user'}), we can clearly see that none of them comes from a normal distribution. Indeed, they are all right skewed, which comes from the fact that only a few students are very active on the platform.
+By plotting the histograms of some of the numerical features (\emph{`num\_checks'}, \emph{`num\_participations'}, \\ \emph{`num\_actions\_per\_week'} and \emph{`num\_weeks\_per\_user'}) (Figure \ref{fig:histograms}), we can clearly see that none of them comes from a normal distribution. Indeed, they are all right skewed, which comes from the fact that only a few students are very active on the platform.
 
 We also remark that there is a geographical element to the data, and this is important because it might introduce mixed effects between the groups of students by region. Consequently we investigated to some degree the cantonal representation within the dataset and how activity on the platform varied with location. At this stage it is quite preliminary is essentially an aperçu into what additional features we may need to include in the model for more accurate results (find more details in the associated notebook).
 
